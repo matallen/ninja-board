@@ -15,6 +15,7 @@ var dragula = require('dragula');
     this.jKanban = function () {
         var self = this;
         this._disallowedItemProperties = ['id', 'title', 'click', 'drag', 'dragend', 'drop', 'order'];
+        //this._disallowedItemProperties = ['id', 'click', 'drag', 'dragend', 'drop', 'order'];
         this.element = '';
         this.container = '';
         this.boardContainer = [];
@@ -23,6 +24,8 @@ var dragula = require('dragula');
         this.drakeBoard = '';
         this.addItemButton = false;
         this.buttonContent = '+';
+        this.users = [];
+        this.userToAvatarId = {};
         defaults = {
             element: '',
             gutter: '15px',
@@ -54,8 +57,16 @@ var dragula = require('dragula');
         if (arguments[0] && typeof arguments[0] === "object") {
             this.options = __extendDefaults(defaults, arguments[0]);
         }
-
+        
         this.init = function () {
+        	//get user (if assignment enabled)
+        	if (self.options.userAssignment){
+        	  self.users=self.options.loadUsers();
+        	  for(i=0;i<self.users.length;i++){
+        		  self.userToAvatarId[users[i].username]=self.users[i].id;
+        	  }
+        	}
+        	
             //set initial boards
             __setBoard();
             //set drag with dragula
@@ -288,14 +299,29 @@ var dragula = require('dragula');
                     // Display card text
                     nodeItemTitle.innerHTML=cardDisplay(board.id, nodeItem, itemKanban);
                     
+                    var cardHtml=nodeItemTitle;
+                    var card=nodeItem.dataset;
+                    var cardId=nodeItem.dataset.eid;
+                    // action handlers
+                    
+                    // open handler
+                    __clickHandler(nodeItemTitle.querySelectorAll(".btnOpen")[0], card, function(card){
+                    	console.log('card.onOpen():: card='+JSON.stringify(card));
+                    	$(".modal-title").text("#"+card.eid);
+                    	$(".issue-title").text(card.title);
+                    	$("#details").modal()
+                    });
+                    
                     if (self.options.labels){
                       
+                      // label delete handler
                       var labels=nodeItemTitle.querySelectorAll(".btnLabelDelete");
                       for (i=0; i<labels.length; i++)
                         __onClickHandler2(labels[i], nodeItem, self.options.onLabelDelete, function(caller){
                         	caller.parentElement.remove();
                         });
                       
+                      // label new handler
                       var labels=nodeItemTitle.querySelectorAll(".btnLabelNew");
                       for (i=0; i<labels.length; i++){
                         __onBlurHandler2(labels[i], nodeItem, self.options.onLabelNew, function (newLabelTextBox, taskId, label){
@@ -312,9 +338,38 @@ var dragula = require('dragula');
                       __attachOnLabelDeleteHandlers(nodeItemTitle.querySelector(".labelswrapper"), nodeItem);
                     }
                     
-                    
                     if (self.options.deleteCards)
-                      __ondeleteHandler(nodeItemTitle.querySelector(".btnDeleteCard"), nodeItem, self.options.onDelete);
+                      __ondeleteHandler(nodeItemTitle.querySelector(".btnDeleteCard"), nodeItem, self.options.onCardDelete);
+                    
+                    if (self.options.userAssignment){
+                      
+                      // user assignment avatar onClick
+                      var userButtons=nodeItemTitle.querySelectorAll(".btnAssignUser");
+                      for (i=0; i<userButtons.length; i++){
+                    	  __onAssignUserClickHandler(userButtons[i], nodeItem, self.options.onAssignUser, self.options.onUnassignUser);
+                      }
+                      
+                      
+                      // user assignment name filter box
+                      var filterBoxes=nodeItemTitle.querySelectorAll(".user-filter");
+                      for (i=0; i<filterBoxes.length; i++){
+                    	  __keyUpHandler(filterBoxes[i], card, cardHtml, function(card, html){
+                    		  var value=html.querySelector(".user-filter").value.toLowerCase();
+                    		  console.log("user-filter("+card.eid+").click()->"+value);
+                    		  html.querySelectorAll(".row").forEach(function(row){
+                    			  text = row.innerText.trim().toLowerCase();
+                    			  console.log("row = "+text);
+                    			  if(text.indexOf(value)>=0){
+                    				  row.style.display="block";
+                    			  }else{
+                    				  row.style.display="none";
+                    			  }
+                    			  
+                    		  });
+                    	  });
+                      }
+                      
+                    }
                     
                     __onBlurHandler2(nodeItemTitle.querySelector(".title"), nodeItem, self.options.onUpdate, function (newLabelTextBox, taskId, label){
                     	// this is only called on successful update of title, so update the title to the new value?
@@ -402,6 +457,72 @@ var dragula = require('dragula');
             self.element.appendChild(self.container);
         };
         
+        //function __clickHander(target, nodeItem, fn){
+        //	target.addEventListener('click', function (e) {
+        //        e.preventDefault();
+        //        fn(nodeItem.dataset.eid); // pass the card Id
+        //	});
+        //}
+        
+        function __openHandler(target, nodeItem, fn){
+        	target.addEventListener('click', function (e) {
+                e.preventDefault();
+                fn(nodeItem);
+        	});
+        }
+        
+        function __clickHandler(target, card, fn){
+        	target.addEventListener('click', function (e) {
+                e.preventDefault();
+                fn(card);
+        	});
+        }
+        
+        function __keyUpHandler(target, card, html, fn){
+        	target.addEventListener('keyup', function (e) {
+                e.preventDefault();
+                fn(card, html);
+        	});
+        }
+        
+        function __onShowUsersClickHandler(target, nodeItem, clickfn){
+        	target.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (typeof(this.clickfn) === 'function')
+                    this.clickfn(nodeItem);
+                //console.log('loading Users dialog for cardId='+nodeItem.dataset.eid);
+                //var jsonUsers=self.options.loadUsers(nodeItem.dataset.eid);
+            });
+        }
+        
+        function __onAssignUserClickHandler(target, nodeItem, assignfn, unassignfn){
+        	target.addEventListener('click', function (e) {
+                e.preventDefault();
+                //console.log('onAssign/UnassignUser():: card '+e.currentTarget.dataset.cardid+', toggled user '+e.currentTarget.dataset.userid);
+                
+                var checkmarkId=e.currentTarget.dataset.checkmark;
+                
+                //change the UI
+                var cm=$("#"+checkmarkId);
+                
+                //callback to the framework actions
+                if (cm.hasClass("is-picked")){
+                	unassignfn(e.currentTarget.dataset.cardid, e.currentTarget.dataset.userid, function(cardId, userId){
+                		cm.removeClass("is-picked");
+                		// remove avatar from card
+                		$("button#assign-c"+cardId+"-u"+userId).remove();
+                	});
+                }else{
+                	assignfn(e.currentTarget.dataset.cardid, e.currentTarget.dataset.userid, function(cardId, userId){
+                		cm.addClass("is-picked");
+                		// add avatar to card
+                		$("div#assign-"+cardId).append(__assignUserAvatar(cardId, userId));
+                	});
+                }
+                
+            });
+        }
+        
         function __attachOnLabelDeleteHandlers(labelsWrapper, nodeItem){
           var deleteButtons=labelsWrapper.querySelectorAll(".btnLabelDelete");
           for (i=0; i<deleteButtons.length; i++)
@@ -485,6 +606,7 @@ var dragula = require('dragula');
                     continue;
                 }
 
+                //console.log("__appendCustomProperties:: "+propertyName+"="+parentObject[propertyName]);
                 element.setAttribute('data-' + propertyName, parentObject[propertyName]);
             }
         }
@@ -495,26 +617,105 @@ var dragula = require('dragula');
                 self.container.childNodes[i].dataset.order = index++;
             }
         }
+        
+        function __assignUserAvatar(cardId, userId){
+        	if (userId=="") return;
+        	
+        	//for(i=0;i<users.length;i++){
+        	//	if (users[i].username==userId){
+        			var result='';
+        			result+='      <button data-toggle="dropdown" id="assign-c'+cardId+'-u'+userId+'" class="dropdown-toggle action-btn btnUsers">';
+        			result+='        <img style="position:relative; top:-4px;" width="20" height="20" src="https://avatars1.githubusercontent.com/u/'+self.userToAvatarId[userId]+'?v=4">';
+        			result+='      </button>';
+        			return result;
+        	//	}
+        	//}
+        }
 
         function cardDisplay(boardId, el, data){
-          var result="<div class='card'>";
-          result+="<div class='header'><a class='id' href='#'>"+data.id+"</a><span class='right'>";
+        	//console.log("cardDisplay:: el="+JSON.stringify(el));
+        	console.log("cardDisplay:: data="+JSON.stringify(data));
+        	
+          // known action buttons: btnLabelDelete, btnLabelNew, btnDeleteCard
           
-          if (self.options.userAssignment)
-            result+="<button class='action-btn'><i class='unassigned fa fa-user'></i></button>";
+          var result="";
           
-          result+="</span></div>";
-          result+="<div class='body'>";
+          result+="  <div class='card'>";
+          result+="   <table style='width:100%;'>";
           
-          if (undefined!=self.options.customDisplay){
-            result+=self.options.customDisplay(boardId, el, data);
+          // header
+          result+="    <tr>";
+          
+          // header.id
+          result+="     <td class='field w-10'><a class='id btnOpen' href='#'>"+data.id+"</a></td>";
+          
+          // header.title
+          result+="     <td class='field'>";
+            if (undefined!=self.options.customDisplay){
+              result+=self.options.customDisplay(boardId, el, data);
           }else{
-            result+="<textarea class='title'>"+data.title+"</textarea>";
+            //result+="<textarea class='title'>"+data.title+"</textarea>";
+            result+="<textarea id='title_"+data.id+"' style='height:10px' class='title'>"+data.title+"</textarea>";
+//            // add date
+//            result+="<br/><span style='border: 3px solid transparent'>"+data.timestamp.substring(0,10)+"</span>";
           }
+          result+="     </td>";
           
-          result+="</div><div class='footer clearfix'>";
-          result+="<div class='labels'>";
-          result+="<span class='labelswrapper'>";
+          // header.assignment
+          result+="     <td class='field w-5'>";
+          //<button data-toggle='dropdown' class='dropdown-toggle action-btn btnAssignUser'><i class='fa fa-user action-menu-icon'></i></button></td>";
+          
+	          result+='     <div class="dropdown" id="assign-'+data.id+'" style="white-space: nowrap;">';
+//	          result+='      <button data-toggle="assignment-dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle action-btn" >';
+	          
+	        
+	          if (data.assigned!=undefined && data.assigned.length>0){
+	        	
+	        	// display the list of avatars for the assigned users
+	        	var assigned=data.assigned.split(",");
+	          	for (i=0;i<assigned.length;i++)
+	          	  result+=__assignUserAvatar(data.id, assigned[i])
+	          }else{
+	        	  // display the grey head & shoulders
+	        	  result+='      <button data-toggle="dropdown" id="assign-c'+data.id+'-u0" class="dropdown-toggle action-btn btnUsers"><i class="fa fa-user action-menu-icon"></i></button>';
+	          }
+	        
+//	          result+='      <button data-toggle="dropdown" data-target="#assign-'+data.id+'" data-backdrop="static" id="assignmentMenuBtn" class="dropdown-toggle action-btn btnUsers"><i class="fa fa-user action-menu-icon"></i></button>';
+	          result+='      <div style="width: 230px; left:-196px; top: 35px; padding:0px" class="dropdown-menu" aria-labelledby="assignmentMenuBtn">';
+	          result+='       <div class="up-arrow"></div>';
+	          result+='       <div class="up-arrow-inner"></div>';
+	          
+	          result+='       <div class="text-center waffle-dropdown-menu-header">';
+	          result+='        <div style="margin:8"><p style="">Assign people to this card</p>';
+	          result+='        <input style="height:25px" type="text" placeholder="Filter people" class="user-filter form-control js-assignee-search ng-pristine ng-valid"></div>';
+	          result+='        <ul id="user-table" style="padding:0px; margin:0px" onclick="event.stopPropagation();">';
+	          //var allUsers=self.options.loadUsers(data.id);
+	          for (i=0;i<users.length;i++){
+	        	  result+='     <li class="dropdown-menu-item row" style="margin:0px 0px 0px 0px;">';
+	        	  var checkmarkId=data.id+''+users[i].username+'checkmark';
+	        	  result+='      <i id="'+checkmarkId+'" class="fa fa-check checkmark '+(data.assigned!=undefined && data.assigned.includes(users[i].username)?'is-picked':'')+'"></i>';
+	              result+='      <button data-cardId="'+data.id+'" data-userId="'+users[i].username+'" data-checkmark="'+checkmarkId+'" style="width:100%; text-align:left;" class="btnAssignUser action-btn">';
+	              result+='        <img style="position:relative; top:-4px;" width="30" height="30" src="https://avatars1.githubusercontent.com/u/'+users[i].id+'?v=4">&nbsp;'+users[i].name+'';
+	              result+='      </button>';
+	              result+='     </li>';
+	          }
+	          result+='        </ul>';
+	          result+='       </div>';
+	          result+='      </div>';
+	          result+='     </div>';
+	          
+          result+="    </td></tr>";
+          
+          // main
+          // (empty)
+          
+          // footer
+          result+="    <tr>";
+          result+="     <td colspan='3'><table style='width:100%'><tr><td style='width:100%;'>";
+          
+          // footer.labels
+          result+="      <div class='labels'>";
+          result+="       <span class='labelswrapper'>";
           if (self.options.labels){
             if (undefined!=data.labels){
               var labelsArray=data.labels.split(",");
@@ -524,37 +725,51 @@ var dragula = require('dragula');
               }
             }
           }
+          result+="       </span>";
+          result+="      <span class='label-pill ng-scope label-pill-new'><input class='btnLabelNew' onBlur='this.parentNode.classList.remove(\"open\")' onFocus='this.parentNode.classList.add(\"open\")' data-id='"+data.id+"' type='text'/></span>";
+          result+="      </div></td>";
           
-          result+="</span>";
-          result+="<span class='label-pill ng-scope label-pill-new'><input class='btnLabelNew' onBlur='this.parentNode.classList.remove(\"open\")' onFocus='this.parentNode.classList.add(\"open\")' data-id='"+data.id+"' type='text'/></span>";
-          result+="</div>";
+          // footer.checklist
+          if (self.options.checklists)
+            result+="       <td class='w-5'><button class='action-btn'><i class='fas fa-tasks'></i></button></td>";
           
-          result+="<div class='actions right'>";
-          
+          // footer.comments
           if (self.options.comments)
-            result+="<button class='action-btn'><i class='fas fas-comment-alt'></i></button>";
-            
+            result+="       <td class='w-5'><button class='action-btn'><i class='fas fas-comment-alt'></i></button></td>";
+          
+          // footer.action menu
           if (self.options.contextMenu){
-            result+='<div class="action-menu">';
-            result+='  <button data-toggle="dropdown" class="dropdown-toggle action-btn" >';
+            result+='<td class="w-5">';
+            
+            result+='<div class="dropdown">';
+            result+='  <button data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle action-btn" >';
             result+='    <i class="fa fa-ellipsis-v action-menu-icon"></i>';
             result+='  </button>';
-            result+='  <ul class="dropdown-menu card-dropdown-menu">';
-            
+            result+='  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+            result+='  <ul class="">'; // had classes: dropdown-menu card-dropdown-menu
             if (self.options.deleteCards){
-              result+='    <li class="dropdown-menu-item">';
-              result+='      <button class="btnDeleteCard action-btn">Delete Card</button>';
-              result+='    </li>';
+              result+='    <li class="dropdown-menu-item"><button class="btnDeleteCard action-btn">Delete Card</button></li>';
             }
             result+='  </ul>';
+            result+='  </div>';
             result+='</div>';
-            
           }
           
-          result+="</div></div>";
-          result+="</div>";
-        
+          // close out the structure
+          result+="       ";
+          result+="      </tr></table>";
+          result+="     </td>";
+          result+="    </tr>";
+          
+          result+="   <table>";
+          
+          result+=' </div>';
+          result+='</div>';
+          
           return result;
+          
+          
+          
         }
         
         //init plugin

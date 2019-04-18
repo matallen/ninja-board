@@ -22,6 +22,7 @@ import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.JsonMappingException;
 
+import com.google.common.base.Joiner;
 import com.redhat.sso.ninja.utils.IOUtils2;
 import com.redhat.sso.ninja.utils.Json;
 
@@ -116,7 +117,8 @@ public class Database2{
   	UID("uid"),
   	TITLE("title"),
   	OWNERS("owners"),
-  	LABELS("labels");
+  	LABELS("labels"),
+  	SUBTASKS("subtasks");
   	public String v;
   	TASK_FIELDS(String v){
   		this.v=v;
@@ -137,7 +139,7 @@ public class Database2{
     }
   }
   // user is the target user: ie. fbloggs
-	public void addTask(String taskText, String user){
+	public void addTask(String taskText, String user, String[] subtasks){
     Map<String,String> task=new HashMap<String, String>();
     task.put(TASK_FIELDS.TIMESTAMP.v, sdf2.format(new Date()));
     task.put(TASK_FIELDS.UID.v, UUID.randomUUID().toString());
@@ -145,6 +147,7 @@ public class Database2{
     task.put(TASK_FIELDS.TITLE.v, taskText);
     task.put(TASK_FIELDS.USER.v, user);
     task.put(TASK_FIELDS.LIST.v, "todo");
+    task.put(TASK_FIELDS.SUBTASKS.v, Joiner.on(",").join(subtasks));
     getTasks().add(task);
 	}
   

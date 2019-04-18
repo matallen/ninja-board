@@ -72,9 +72,11 @@
 	top: 8px;
 	*/
 }
+/*
 .nav>li>a{
 	padding-left: 0px;
 }
+*/
 
 .navbar-header a:link      {color:#FFE;}
 .navbar-header a:visited   {color:#FFE;}
@@ -96,8 +98,8 @@
 .btn-image{opacity: .8; width:30px; height:30px;background-position:-1px -1px;}
 
 /*OVERRIDING BOOTSTRAP CSS DEFAULTS*/
-.btn-primary{background-color:#444 !important;border:0px solid #e7e7e7 !important;}
-.btn-primary:hover{background-color:#333 !important;border:0px solid #e7e7e7 !important;}
+.btn-primary{background-color:#444 !important;border:1px solid #e7e7e7 !important;}
+.btn-primary:hover{background-color:#333 !important;border:1px solid #e7e7e7 !important;}
 /*END OF OVERRIDING*/
 
 

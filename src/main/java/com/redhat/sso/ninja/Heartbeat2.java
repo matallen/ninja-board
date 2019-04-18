@@ -459,7 +459,7 @@ public class Heartbeat2 {
           
           if (!StringUtils.isEmpty(graphsProxyUrl)){
             String url=graphsProxyUrl+"/api/proxy";
-            log.warn("graphsProxyUrl is null == "+(null==graphsProxyUrl));
+//            log.warn("graphsProxyUrl is null == "+(null==graphsProxyUrl));
             log.warn("roxy configured at: "+url);
             ChartsController cc=new ChartsController();
             ManagementController mc=new ManagementController();
@@ -534,7 +534,7 @@ public class Heartbeat2 {
             
             String displayName=userInfo.containsKey("displayName")?userInfo.get("displayName"):userInfo.get("username");
             String title=displayName+" promoted to "+nextLevel.getRight()+" belt";
-            db.addTask(title, userInfo.get("username"));
+            db.addTask(title, userInfo.get("username"), new String[]{"do this","do that","and do the other"});
             
             // Notify everyone on the Ninja chat group of a new belt promotion
             new ChatNotification().send(title);

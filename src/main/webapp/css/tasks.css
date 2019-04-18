@@ -8,7 +8,11 @@
 .kanban-item{
   padding: 4px 1px 4px 4px !important;
   box-sizing: border-box;
+  
+  /*
+  this causes the menu dropdowns to appear inside the card - not what we want
   overflow: auto;
+  */
   
   border-radius: 3px;
   -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
@@ -237,9 +241,9 @@ input:focus{
 
 }
 .label-pill{
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
+    -webkit-border-radius: 2px;
+    -moz-border-radius:    2px;
+    border-radius:         2px;
     cursor: default;
     padding: 1 7 1 7;
     font-size: 8pt;
@@ -323,11 +327,14 @@ perhaps try getting the event, clicked object/button and setting the absolute po
     width: 100%;
 }
 
-
+/* defunct*/
 .action-btn i:hover, .action-btn i:active, .action-btn i:focus{
 	color: #525252;
 }
 
+.action-menu-icon:hover, .action-menu-icon:active, .action-menu-icon:focus{
+	color: #525252;
+}
 
 .dropdown-menu-item:hover{
 	color: #777;
@@ -349,14 +356,12 @@ perhaps try getting the event, clicked object/button and setting the absolute po
 }
 */
 
+/*
 .action-menu .card-dropdown-menu:after, .action-menu .card-dropdown-menu:before {
     border: solid transparent;
     content: " ";
     height: 0;
     position: absolute;
-/*
-    right: 7px;
-*/
     top: -4px;
     left: 87%;
     width: 0;
@@ -366,6 +371,7 @@ perhaps try getting the event, clicked object/button and setting the absolute po
     border-width: 10px;
     margin-top: -15px;
 }
+*/
 
 .dropdown-menu-item button{
 	width: 100%;
@@ -380,9 +386,9 @@ left: 90%;
 
 .action-menu{
 	position:absolute;
-	width: 18%
 	/*
 	float:right;
+	width: 18%
 	width: 200px;
 	left:90%;
 	*/

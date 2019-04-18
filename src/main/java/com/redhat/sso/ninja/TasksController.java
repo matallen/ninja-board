@@ -22,12 +22,15 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+import com.google.gdata.util.common.base.StringUtil;
 import com.redhat.sso.ninja.Database2.TASK_FIELDS;
 import com.redhat.sso.ninja.utils.Json;
 
@@ -36,7 +39,23 @@ public class TasksController {
   private static final Logger log=Logger.getLogger(TasksController.class);
   
 
-  
+  @GET
+  @Path("/testTask")
+  public Response testTask(@Context HttpServletRequest request,@Context HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException, URISyntaxException{
+  	
+  	String task=request.getParameter("task");
+  	String user=request.getParameter("user");
+  	String subtasks=request.getParameter("subtasks");
+  	
+  	if (StringUtils.isNotBlank(task) && StringUtils.isNotBlank(user) && StringUtils.isNotBlank(subtasks)){
+  		Database2 db=Database2.get();
+  		String[] sTasks=subtasks.split(",");
+  		db.addTask(task, user, sTasks);
+  	}else{
+  		return Response.status(500).entity("either 'task', 'user' or 'subtasks' query parameter was empty").build();
+  	}
+  	return Response.status(200).build();
+  }
   
 	@POST
 	@Path("/tasks")
@@ -136,6 +155,83 @@ public class TasksController {
 		return Response.ok().build();
 	}
 
+	
+	// USER ASSIGNMENT
+	@DELETE
+	@Path("/tasks/{taskId}/assigned/{user}")
+	public Response removeAssignee(@PathParam("taskId") String taskId, @PathParam("user") String user, @Context HttpServletRequest request,@Context HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException, URISyntaxException{
+		log.info("removeAssignee:: [DELETE] /tasks/"+taskId+"/assigned/"+user);
+		Database2 db=Database2.get();
+		Map<String, String> task=getTaskById(db, taskId);
+
+		if (task.get("assigned")==null) task.put("assigned", ""); // lazy init for backwards compat
+		List<String> assigned=Lists.newArrayList(Splitter.on(",").split(task.get("assigned")));
+
+		if (assigned.contains(user))
+			assigned.remove(user);
+		
+		task.put("assigned", Joiner.on(",").join(assigned));
+		db.save();
+		return Response.ok().build();
+	}
+	@POST
+	@Path("/tasks/{taskId}/assigned/{user}")
+	public Response addAssignee(@PathParam("taskId") String taskId, @PathParam("user") String user, @Context HttpServletRequest request,@Context HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException, URISyntaxException{
+		log.info("addAssignee:: [POST] /tasks/"+taskId+"/assigned/"+user);
+		Database2 db=Database2.get();
+		Map<String, String> task=getTaskById(db, taskId);
+		
+		if (task.get("assigned")==null) task.put("assigned", ""); // lazy init for backwards compat
+		List<String> assigned=Lists.newArrayList(Splitter.on(",").split(task.get("assigned")));
+		
+		if (!assigned.contains(user))
+			assigned.add(user);
+		
+		task.put("assigned", Joiner.on(",").skipNulls().join(assigned));
+		db.save();
+		return Response.ok().build();
+	}
+	@GET
+	@Path("/tasks/{taskId}/assigned")
+	public Response getAssigned(@PathParam("taskId") String taskId, @PathParam("user") String user, @Context HttpServletRequest request,@Context HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException, URISyntaxException{
+		log.info("getAssigned:: [POST] /tasks/"+taskId+"/assigned");
+		
+		Database2 db=Database2.get();
+		Map<String, String> task=getTaskById(db, taskId);
+		
+		if (task.get("assigned")==null) task.put("assigned", ""); // lazy init for backwards compat
+//		List<String> assigned=Arrays.asList(task.get("assigned").split(","));
+		List<String> assigned=Lists.newArrayList(Splitter.on(",").split(task.get("assigned")));
+		
+		return Response.ok().type(MediaType.APPLICATION_JSON).entity(Json.newObjectMapper(true).writeValueAsString(assigned)).build();
+	}
+	
+//	public static void main(String[] ad){
+//		List<String> assigned=Splitter.on(",").split("");
+//		System.out.println(assigned);
+//	}
+//	
+	
+	static class Splitter{
+		String d;
+		public Splitter(String d){
+			this.d=d;
+		}
+		static public Splitter on(String delimiter){
+			return new Splitter(delimiter);
+		}
+		public List<String> split(String input){
+			List<String> result=new ArrayList<String>();
+			Iterable<String> xx=com.google.common.base.Splitter.on(d).split(input);
+			for(String x:xx){
+				if (!StringUtils.isEmpty(x.trim()))
+						result.add(x);
+			}
+			return result;
+		}
+	}
+	
+	// LABELS
 	@DELETE
 	@Path("/tasks/{taskId}/labels/{label}")
 	public Response removeLabel(@PathParam("taskId") String taskId, @PathParam("label") String label, @Context HttpServletRequest request,@Context HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException, URISyntaxException{
@@ -162,7 +258,6 @@ public class TasksController {
 		db.save();
 		return Response.ok().build();
 	}
-	
 	@POST
 	@Path("/tasks/{taskId}/labels/{label}")
 	public Response addLabel(@PathParam("taskId") String taskId, @PathParam("label") String label, @Context HttpServletRequest request,@Context HttpServletResponse response) throws JsonGenerationException, JsonMappingException, IOException, URISyntaxException{
@@ -185,6 +280,18 @@ public class TasksController {
 		}
 		db.save();
 		return Response.ok().build();
+	}
+	
+	
+	
+	// GENERAL HELPER FUNCTIONS
+	private Map<String, String> getTaskById(Database2 db, String taskId){
+		for(Map<String, String> task:db.getTasks()){
+			if (taskId.equals(task.get(TASK_FIELDS.ID.v))){
+				return task;
+			}
+		}
+		return null;
 	}
 	
 }

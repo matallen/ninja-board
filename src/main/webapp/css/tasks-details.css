@@ -1,0 +1,71 @@
+.comment-form {
+	background-color: #f6f6f6;
+	border: 1px solid #cdcdcd;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+}
+
+.comment-form .nav-tabs {
+	padding: 8px 10px 0;
+}
+/*
+.nav-tabs {
+  border-bottom: 1px solid #ddd;
+}
+*/
+.nav {
+	padding-left: 0;
+	margin-bottom: 0;
+	list-style: none;
+}
+
+.comment-form .tab-content {
+	background-color: #fff;
+	padding: 4px;
+	overflow: auto;
+}
+
+.comment-form .footer {
+	background-color: #fff;
+	padding: 0 4px 4px;
+	width: 100%;
+	overflow: auto;
+	-webkit-border-top-right-radius: 0;
+	-webkit-border-bottom-right-radius: 6px;
+	-webkit-border-bottom-left-radius: 6px;
+	-webkit-border-top-left-radius: 0;
+	-moz-border-radius-topright: 0;
+	-moz-border-radius-bottomright: 6px;
+	-moz-border-radius-bottomleft: 6px;
+	-moz-border-radius-topleft: 0;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 6px;
+	border-bottom-left-radius: 6px;
+	border-top-left-radius: 0;
+	-moz-background-clip: padding-box;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+}
+.assignee-img{
+	    border-radius: 3px;
+    float: left;
+    height: 25px;
+    margin-right: 5px;
+    width: 25px;
+}
+.assignee-img-list{
+	    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+.assignee-img-list-item{
+	height: 28px;
+    margin-bottom: 0;
+}
+.card-details-label-pill {
+	height: 100%;
+    margin: 1;
+    color: #343434;
+	
+}

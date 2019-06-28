@@ -47,7 +47,13 @@ public class Heartbeat2 {
 
   public static void main(String[] asd){
     try{
-      new HeartbeatRunnable().levelUpChecks(Database2.get());
+    	
+    	
+    	long l=new Heartbeat2().getMillisToNextTime("12:15");
+    	String s=Heartbeat2.msToSensibleString(l);
+    	System.out.println(s);
+    	
+//      new HeartbeatRunnable().levelUpChecks(Database2.get());
     }catch(Exception e){
       e.printStackTrace();
     }
@@ -129,9 +135,11 @@ public class Heartbeat2 {
   	
   	Calendar now=newCalendar(System.currentTimeMillis());
   	
-  	int nowHour=now.get(Calendar.HOUR_OF_DAY);
-  	int startHour=start.get(Calendar.HOUR_OF_DAY);
-  	if (nowHour>=startHour){
+//  	int nowHour=now.get(Calendar.HOUR_OF_DAY);
+//  	int startHour=start.get(Calendar.HOUR_OF_DAY);
+  	
+  	if (start.before(now)){
+//  	if (nowHour>=startHour){
   		// too late today, move to tomorrow
   		start.set(Calendar.DAY_OF_MONTH, start.get(Calendar.DAY_OF_MONTH)+1);
   	}
@@ -459,7 +467,7 @@ public class Heartbeat2 {
           
           if (!StringUtils.isEmpty(graphsProxyUrl)){
             String url=graphsProxyUrl+"/api/proxy";
-            log.warn("graphsProxyUrl is null == "+(null==graphsProxyUrl));
+//            log.warn("graphsProxyUrl is null == "+(null==graphsProxyUrl));
             log.warn("roxy configured at: "+url);
             ChartsController cc=new ChartsController();
             ManagementController mc=new ManagementController();
@@ -534,7 +542,7 @@ public class Heartbeat2 {
             
             String displayName=userInfo.containsKey("displayName")?userInfo.get("displayName"):userInfo.get("username");
             String title=displayName+" promoted to "+nextLevel.getRight()+" belt";
-            db.addTask(title, userInfo.get("username"));
+            db.addTask(title, userInfo.get("username"), new String[]{"do this","do that","and do the other"});
             
             // Notify everyone on the Ninja chat group of a new belt promotion
             new ChatNotification().send(title);

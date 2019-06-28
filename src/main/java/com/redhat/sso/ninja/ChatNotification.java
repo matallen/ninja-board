@@ -22,6 +22,7 @@ public class ChatNotification{
 			System.out.println("Sending notification...");
 			// https://developers.google.com/hangouts/chat/how-tos/webhooks
 			String url=      c.getOptions().get("googlehangoutschat.webhook.url");
+			if (null==url) url=System.getenv("googlehangoutschat.webhook.url");
 			String template= c.getOptions().get("googlehangoutschat.webhook.template");
 			String googleHangoutsChatPayload=String.format(template, notificationText);
 			

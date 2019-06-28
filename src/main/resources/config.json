@@ -34,5 +34,9 @@
 	},
 	"values": {
 		"lastRun2": "2019-03-01T00:00:00"
-	}
+	},
+	"users": [
+		{"name":"Mat Allen", "username":"matallen", "avatar":"https://mojo.redhat.com/people/mallen/avatar/200.png?a=925089"},
+		{"name":"Andrew Block", "username":"ablock", "avatar":"https://mojo.redhat.com/people/ablock/avatar/200.png?a=925089"}
+	]
 }

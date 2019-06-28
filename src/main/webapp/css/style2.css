@@ -90,6 +90,9 @@
 .navbar-nav .dropdown-menu li a:hover  {color:#333;}
 .navbar-nav .dropdown-menu li a:active {color:#333;} 
 
+.animate{
+  transition: all .3s;
+}
 
 .btn-image:hover{opacity: .9}
 .btn-image{opacity: .8; width:30px; height:30px;background-position:-1px -1px;}

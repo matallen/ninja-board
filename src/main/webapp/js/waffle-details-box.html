@@ -1,0 +1,255 @@
+<div class="modal-content ui-draggable" modal-transclude="" style="left: 4px; top: 179px;"><waffle-detail-modal class="ng-scope"><div class="modal-header" bindonce="">
+  <div class="drag-modal ui-draggable-handle">
+    <i class="drag-handle fa fa-ellipsis-v"></i>
+    <i class="drag-handle fa fa-ellipsis-v"></i>
+  </div>
+  <a bo-href="card.githubMetadata.html_url || card.githubMetadata.pull_request.html_url" target="_blank" ng-click="controller.track('clicked title to go to GitHub from issue detail')" href="https://github.com/redhat-cop/pathfinder/issues/158">
+    <span class="issue-number" bo-bind="card.githubMetadata.number">158</span>
+  </a>
+  <button type="button" class="close" ng-click="$close()" aria-hidden="true">×</button>
+</div>
+
+<div class="modal-body container-fluid" bindonce="">
+  <div class="row">
+    <div class="card-sidebar col-md-10">
+      <!-- ngIf: sourceName -->
+
+      <div class="discussion-status">
+        <span class="state closed" ng-bind="card.githubMetadata.state | uppercase" ng-click="controller.track('clicked issue state from issue detail')">CLOSED</span>
+        <!-- ngIf: card.archived -->
+        <!-- boIf: isTeamMember --><!-- ngIf: card.githubMetadata.state === 'closed' && !card.archived --><span bo-if="isTeamMember" ng-if="card.githubMetadata.state === 'closed' &amp;&amp; !card.archived" class="ng-scope">
+          <a class="btn btn-default btn-sm archive-button" ng-click="archiveCard()">
+             <i class="fa fa-archive"></i>
+             <span>Archive</span>
+          </a>
+        </span><!-- end ngIf: card.githubMetadata.state === 'closed' && !card.archived -->
+
+        <p class="comments-number">
+          <strong class="ng-binding">1</strong>
+          <ng-pluralize count="card.githubMetadata.comments" when="{'1': 'comment', 'other': 'comments'}">comment</ng-pluralize>
+        </p>
+        <div class="horizontal-divider"></div>
+      </div>
+
+      <div class="assignee-container sidebar-options">
+        <button data-toggle="dropdown" class="option-button" ng-click="openAssignees()" bo-disabled="!isTeamMember">
+          <span>Assignees</span>
+          <!-- boIf: isTeamMember --><i bo-if="isTeamMember" class="fa fa-gear menu-toggle-icon ng-scope"></i>
+        </button>
+        <!-- ngIf: assigneesExpanded -->
+        <!-- ngIf: card.githubMetadata.assignees.length -->
+        <!-- ngIf: !card.githubMetadata.assignees.length --><p class="option-placeholder ng-scope" ng-if="!card.githubMetadata.assignees.length">Unassigned</p><!-- end ngIf: !card.githubMetadata.assignees.length -->
+      </div>
+
+      <!-- ngIf: !isEpic --><div class="size-container sidebar-options ng-scope" ng-if="!isEpic">
+        <button data-toggle="dropdown" class="option-button unsized" ng-class="{unsized:!card.size}" ng-click="openSize()" bo-disabled="!isTeamMember">
+          <span>Size/Estimate</span>
+          <!-- boIf: isTeamMember --><i bo-if="isTeamMember" class="fa fa-gear menu-toggle-icon ng-scope"></i>
+        </button>
+        <!-- ngIf: sizeExpanded -->
+        <!-- ngIf: card.size -->
+        <!-- ngIf: !card.size --><p class="option-placeholder ng-scope" ng-if="!card.size">No Size</p><!-- end ngIf: !card.size -->
+      </div><!-- end ngIf: !isEpic -->
+
+      <div class="labels-container sidebar-options">
+        <button data-toggle="dropdown" class="option-button" ng-click="openLabels()" bo-disabled="!isTeamMember">
+          <span>Labels</span>
+          <!-- boIf: isTeamMember --><i bo-if="isTeamMember" class="fa fa-gear menu-toggle-icon ng-scope"></i>
+        </button>
+        <!-- ngIf: labelsExpanded -->
+        <div class="labels">
+          <!-- ngRepeat: label in displayLabels track by label.name --><span ng-repeat="label in displayLabels track by label.name" class="label-pill ng-scope light" bo-class="lightOrDark(label)" bo-style="{'background-color': '#'+label.color}" bo-html="label.displayName" labels="card.githubMetadata.labels" style="background-color: rgb(162, 238, 239);">enhancement</span><!-- end ngRepeat: label in displayLabels track by label.name -->
+          <div class="option-placeholder">No Labels</div>
+        </div>
+      </div>
+
+      <div class="milestone-container sidebar-options">
+        <button data-toggle="dropdown" class="option-button" ng-click="openMilestones()" bo-disabled="!isTeamMember">
+          <span>Milestone</span>
+          <!-- boIf: isTeamMember --><i bo-if="isTeamMember" class="fa fa-gear menu-toggle-icon ng-scope"></i>
+        </button>
+        <!-- ngIf: milestonesExpanded -->
+        <!-- ngIf: card.githubMetadata.milestone --><a class="milestone-chart-link ng-scope" ng-if="card.githubMetadata.milestone" ng-click="controller.track('clicked milestone burndown from issue detail')" target="_blank" tooltip="view milestone graph" tooltip-popup-delay="400" tooltip-append-to-body="true" ui-sref="app.board.metrics.burndown({ milestone: card.githubMetadata.milestone.title })" href="/redhat-cop/pathfinder/metrics/burndown?milestone=WaterfordSprint">
+          <i class="fa fa-bar-chart" aria-hidden="true"></i>
+        </a><!-- end ngIf: card.githubMetadata.milestone -->
+        <!-- ngIf: card.githubMetadata.milestone --><div class="milestone-pill ng-scope" ng-if="card.githubMetadata.milestone" tooltip="WaterfordSprint" tooltip-popup-delay="700" bo-text="card.githubMetadata.milestone.title">WaterfordSprint</div><!-- end ngIf: card.githubMetadata.milestone -->
+        <!-- ngIf: !card.githubMetadata.milestone -->
+      </div>
+    </div>
+
+    <div class="card-discussion col-md-2" waffle-infinite-scrolling="controller.loadNextPageOfComments()" scroll-buffer="400">
+      <div class="top">
+        <h5 class="issue-title" bo-bind="card.githubMetadata.title">Create CI/CD process (including acceptance tests)</h5>
+        <div class="created-date">
+          <a bo-href="card.githubMetadata.html_url" ng-class="card.githubMetadata.state" class="card-gh-icon btn btn-link btn-xs closed" target="_blank" href="https://github.com/redhat-cop/pathfinder/issues/158">
+            <span class="sr-only">icon that opens issue or pull request in GitHub in new window</span>
+            <!-- ngIf: card.githubMetadata.pull_request -->
+            <!-- ngIf: !card.githubMetadata.pull_request --><i ng-if="!card.githubMetadata.pull_request" ng-class="card.githubMetadata.state == 'open' ? 'github-icon-issue-opened' : 'github-icon-issue-closed'" class="github-icon ng-scope github-icon-issue-closed" aria-hidden="true"></i><!-- end ngIf: !card.githubMetadata.pull_request -->
+          </a>
+          <a bo-href="card.githubMetadata.user.html_url" bo-bind="card.githubMetadata.user.login" href="https://github.com/matallen">matallen</a>
+          <span bindonce="timeSinceCreation">
+            <span bo-bind="'opened this ' + (card.githubMetadata.pull_request ? 'pull request ' : 'issue ') + timeSinceCreation">opened this issue 6 months ago</span>
+          </span>
+        </div>
+      </div>
+      <!-- ngIf: !showDescription -->
+      <!-- ngIf: showDescription --><div ng-if="showDescription" class="ng-scope">
+          <div class="js-card-description card-comment ng-isolate-scope" bindonce="item.user" card="card" item="card.githubMetadata" focus="focus" submit="updateBody()">
+  <a bo-href="item.user.html_url" href="https://github.com/matallen">
+    <img class="discusser-avatar img-rounded" height="40" width="40" bo-src="item.user.avatar_url" src="https://avatars3.githubusercontent.com/u/3470466?v=4">
+  </a>
+
+  <div class="card-item">
+    <div class="card-item-header">
+      <!-- ngIf: !isDescription -->
+      <!-- ngIf: isDescription --><span ng-if="isDescription" class="ng-scope">
+        Description
+      </span><!-- end ngIf: isDescription -->
+
+      <span bindonce="isTeamMember">
+        <!-- boIf: isTeamMember && deletable -->
+        <!-- boIf: isTeamMember --><span class="pull-right github-icon github-icon-pencil ng-scope" bo-if="isTeamMember" ng-click="edit()"></span>
+        <span bindonce="commentLabel" class="pull-right ng-isolate-scope" card="card" comment-owner="item.user"><!-- boIf: commentLabel --><span class="comment-label ng-scope" bo-if="commentLabel" bo-bind="commentLabel" ng-click="trackClick()">collaborator</span></span>
+      </span>
+    </div>
+
+    <div class="card-item-body" ng-show="!editing">
+      <!-- ngIf: !(item.body || item.body_html) -->
+      <!-- ngIf: item.body_html --><div ng-if="item.body_html" ng-bind-html="item.body_html" class="github-markdown ng-binding ng-scope" open-links-in-new-tab=""><p>jenkins on openshift?</p></div><!-- end ngIf: item.body_html -->
+      <!-- ngIf: !item.body_html && item.body && !editing -->
+    </div>
+
+    <div class="card-item-body body-edit ng-hide" ng-show="editing">
+      <waffle-asset-upload-container uploads-disabled="!hasUploads" class="ng-isolate-scope"><div>
+  <div ng-transclude="">
+        <textarea mentio="" mentio-trigger-char="" mentio-typed-text="typedMention" mentio-items="possibleAssignees | filter:label:typedMention" mentio-require-leading-space="true" class="markdown-container dropzone ng-scope ng-isolate-scope ng-pristine ng-valid" msd-elastic="" ng-model="$parent.textareaContent" tabindex="1" waffle-asset-upload-field="" autocomplete="off" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 28px;">        </textarea>
+      </div>
+
+  <!-- ngIf: !isTakeout --><span ng-if="!isTakeout" class="ng-scope">
+  <!-- ngIf: !uploadsDisabled --><p class="img-help-text ng-scope" ng-if="!uploadsDisabled">
+      Drag and drop files/images or
+      <input type="file" name="file" id="file-1U0" multiple="" class="js-upload">
+      <label class="upload-link" for="file-1U0" tabindex="6">select them</label>
+      to upload.
+    </p><!-- end ngIf: !uploadsDisabled -->
+    <!-- ngIf: !uploadsDisabled && error -->
+    <!-- ngIf: uploadsDisabled -->
+  </span><!-- end ngIf: !isTakeout -->
+</div>
+</waffle-asset-upload-container>
+
+      <button class="pull-left btn btn-default cancel-button" ng-click="reset()" tabindex="4">Cancel</button>
+      <button class="pull-right btn btn-primary submit-button" ng-click="submit()" data-loading-text="Saving..." tabindex="3">Update</button>
+    </div>
+  </div>
+</div>
+      </div><!-- end ngIf: showDescription -->
+      <!-- ngRepeat: comment in comments | orderBy:'created_at' track by comment.id --><div class="comment card-comment ng-scope ng-isolate-scope" bindonce="item.user" ng-repeat="comment in comments | orderBy:'created_at' track by comment.id" card="card" item="comment" submit="updateComment(comment)" delete="deleteComment(comment)">
+  <a bo-href="item.user.html_url" href="https://github.com/noelo">
+    <img class="discusser-avatar img-rounded" height="40" width="40" bo-src="item.user.avatar_url" src="https://avatars1.githubusercontent.com/u/458707?v=4">
+  </a>
+
+  <div class="card-item">
+    <div class="card-item-header">
+      <!-- ngIf: !isDescription --><span ng-if="!isDescription" class="ng-scope">
+        <span bindonce="item.user.login">
+          <a bo-href="item.user.html_url" bo-bind="item.user.login" href="https://github.com/noelo">noelo</a>
+        </span>
+        <span bindonce="timeSinceAction">
+          <span class="card-action" bo-bind="'commented ' + timeSinceAction">commented 16 days ago</span>
+        </span>
+      </span><!-- end ngIf: !isDescription -->
+      <!-- ngIf: isDescription -->
+
+      <span bindonce="isTeamMember">
+        <!-- boIf: isTeamMember && deletable --><span class="pull-right github-icon github-icon-x ng-scope" bo-if="isTeamMember &amp;&amp; deletable" ng-click="delete()"></span>
+        <!-- boIf: isTeamMember --><span class="pull-right github-icon github-icon-pencil ng-scope" bo-if="isTeamMember" ng-click="edit()"></span>
+        <span bindonce="commentLabel" class="pull-right ng-isolate-scope" card="card" comment-owner="item.user"><!-- boIf: commentLabel --><span class="comment-label ng-scope" bo-if="commentLabel" bo-bind="commentLabel" ng-click="trackClick()">collaborator</span></span>
+      </span>
+    </div>
+
+    <div class="card-item-body" ng-show="!editing">
+      <!-- ngIf: !(item.body || item.body_html) -->
+      <!-- ngIf: item.body_html --><div ng-if="item.body_html" ng-bind-html="item.body_html" class="github-markdown ng-binding ng-scope" open-links-in-new-tab=""><p>Travis is now used to build and push the images to quay. <a rel="nofollow" href="https://travis-ci.org/redhat-cop/pathfinder" target="_blank">https://travis-ci.org/redhat-cop/pathfinder</a></p></div><!-- end ngIf: item.body_html -->
+      <!-- ngIf: !item.body_html && item.body && !editing -->
+    </div>
+
+    <div class="card-item-body body-edit ng-hide" ng-show="editing">
+      <waffle-asset-upload-container uploads-disabled="!hasUploads" class="ng-isolate-scope"><div>
+  <div ng-transclude="">
+        <textarea mentio="" mentio-trigger-char="" mentio-typed-text="typedMention" mentio-items="possibleAssignees | filter:label:typedMention" mentio-require-leading-space="true" class="markdown-container dropzone ng-scope ng-isolate-scope ng-pristine ng-valid" msd-elastic="" ng-model="$parent.textareaContent" tabindex="1" waffle-asset-upload-field="" autocomplete="off" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 138px;">        </textarea>
+      </div>
+
+  <!-- ngIf: !isTakeout --><span ng-if="!isTakeout" class="ng-scope">
+  <!-- ngIf: !uploadsDisabled --><p class="img-help-text ng-scope" ng-if="!uploadsDisabled">
+      Drag and drop files/images or
+      <input type="file" name="file" id="file-1UG" multiple="" class="js-upload">
+      <label class="upload-link" for="file-1UG" tabindex="6">select them</label>
+      to upload.
+    </p><!-- end ngIf: !uploadsDisabled -->
+    <!-- ngIf: !uploadsDisabled && error -->
+    <!-- ngIf: uploadsDisabled -->
+  </span><!-- end ngIf: !isTakeout -->
+</div>
+</waffle-asset-upload-container>
+
+      <button class="pull-left btn btn-default cancel-button" ng-click="reset()" tabindex="4">Cancel</button>
+      <button class="pull-right btn btn-primary submit-button" ng-click="submit()" data-loading-text="Saving..." tabindex="3">Update</button>
+    </div>
+  </div>
+</div><!-- end ngRepeat: comment in comments | orderBy:'created_at' track by comment.id -->
+
+      <div class="divider"></div>
+
+      <div class="comment-form ng-isolate-scope logged-in" bindonce="loggedIn" bo-class="{'logged-in': loggedIn}" card="card" comments="comments">
+
+  <!-- boIf: loggedIn --><div bo-if="loggedIn" class="ng-scope">
+    <div class="tabset ng-isolate-scope">
+  <ul class="nav nav-tabs" ng-class="{'nav-stacked': vertical, 'nav-justified': justified}" ng-transclude="">
+      <li ng-class="{active: active, disabled: disabled}" heading="Write" class="ng-isolate-scope active">
+  <a href="" ng-click="select()" tab-heading-transclude="" class="ng-binding">Write</a>
+</li>
+
+      <li ng-class="{active: active, disabled: disabled}" heading="Preview" select="previewActive = true" deselect="previewActive = false" disabled="disabled" class="ng-isolate-scope disabled">
+  <a href="" ng-click="select()" tab-heading-transclude="" class="ng-binding">Preview</a>
+</li>
+    </ul>
+  <div class="tab-content">
+    <!-- ngRepeat: tab in tabs --><div class="tab-pane ng-scope active" ng-repeat="tab in tabs" ng-class="{active: tab.active}" tab-content-transclude="tab">
+    
+        <waffle-asset-upload-container uploads-disabled="!hasUploads" class="ng-scope ng-isolate-scope"><div>
+  <div ng-transclude="">
+          <textarea mentio="" mentio-trigger-char="" mentio-typed-text="typedMention" mentio-items="possibleAssignees | filter:label:typedMention" mentio-require-leading-space="true" class="form-control dropzone ng-scope ng-isolate-scope ng-pristine ng-valid" msd-elastic="\n" ng-focus="getPossibleAssignees()" ng-model="$parent.form.comment" ng-class="{'is-error': error}" tabindex="4" waffle-asset-upload-field="" autocomplete="off" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 54px;">          </textarea>
+        </div>
+
+  <!-- ngIf: !isTakeout --><span ng-if="!isTakeout" class="ng-scope">
+  <!-- ngIf: !uploadsDisabled --><p class="img-help-text ng-scope" ng-if="!uploadsDisabled">
+      Drag and drop files/images or
+      <input type="file" name="file" id="file-1TS" multiple="" class="js-upload">
+      <label class="upload-link" for="file-1TS" tabindex="6">select them</label>
+      to upload.
+    </p><!-- end ngIf: !uploadsDisabled -->
+    <!-- ngIf: !uploadsDisabled && error -->
+    <!-- ngIf: uploadsDisabled -->
+  </span><!-- end ngIf: !isTakeout -->
+</div>
+</waffle-asset-upload-container>
+      </div><!-- end ngRepeat: tab in tabs --><div class="tab-pane ng-scope" ng-repeat="tab in tabs" ng-class="{active: tab.active}" tab-content-transclude="tab">
+    
+        <!-- ngIf: previewActive -->
+      </div><!-- end ngRepeat: tab in tabs -->
+  </div>
+</div>
+
+    <div class="footer">
+      <button class="btn btn-primary pull-right comment-btn" tabindex="7" ng-click="comment()" ng-disabled="!form.comment" data-loading-text="Commenting..." disabled="disabled">Comment</button>
+      <!-- ngIf: card.githubMetadata.state != 'closed' -->
+    </div>
+  </div>
+
+  <!-- boIf: !loggedIn -->
+</div>
+    </div>
+  </div>
+</div>
+</waffle-detail-modal></div>

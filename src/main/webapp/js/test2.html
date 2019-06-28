@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en" ng-controller="SiteController" class="ng-scope">
+<!-- Mirrored from waffle.io/matallen/search-widget by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 10 Apr 2019 14:51:37 GMT -->
+<!-- Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<!-- /Added by HTTrack -->
+<head>
+<style type="text/css">
+@charset "UTF-8"; 
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak,
+	.x-ng-cloak, .ng-hide {
+	display: none !important;
+}
+
+ng\:form {
+	display: block;
+}
+
+.ng-animate-block-transitions {
+	transition: 0s all !important;
+	-webkit-transition: 0s all !important;
+}
+
+.ng-hide-add-active, .ng-hide-remove {
+	display: block !important;
+}
+</style>
+<script type="text/javascript"
+	src="https://bam.nr-data.net/1/afca5a5cff?a=50356610&amp;v=1118.0c07c19&amp;to=bl0DbUJXDUoHVRAMCVcXJEFARAZKFVwXSiF8bE4WCkMQXBRYBQgDFgITXEBZLVgLUw%3D%3D&amp;rst=948&amp;ref=https://waffle.io/matallen/search-widget&amp;ap=11.38945&amp;be=396&amp;fe=905&amp;dc=783&amp;tt=13f81796c68dde0&amp;perf=%7B%22timing%22:%7B%22of%22:1554907894786,%22n%22:0,%22f%22:0,%22dn%22:0,%22dne%22:0,%22c%22:0,%22ce%22:0,%22rq%22:0,%22rp%22:0,%22rpe%22:155,%22dl%22:148,%22di%22:780,%22ds%22:780,%22de%22:893,%22dc%22:904,%22l%22:904,%22le%22:906%7D,%22navigation%22:%7B%7D%7D&amp;jsonp=NREUM.setToken"></script>
+<script src="https://js-agent.newrelic.com/nr-1118.min.js"></script>
+<script>var Application = Object.freeze({
+  waffleApi: {"provider":{"_id":"552595507391ec95137f8e13","type":"waffle","baseUrl":"https://waffle.io","baseApiUrl":"https://api.waffle.io","clientId":"53adb117576cde78c500008a","__v":0}},
+  github: {"provider":{"_id":"5399ba229c4ef5963e000508","type":"github","baseApiUrl":"https://api.github.com","baseUrl":"https://github.com","clientId":"b68f04bdff231220a275","default":true,"public":true},"accessToken":"f02993fc3259b98c949cadb9693623c10c3ab955"},
+  pusher: {"key":"ba7653e89f2d37dc6eec"},
+  featureToggles: {"collect_heapdumps":false,"ac":true},
+  session: {"csrfToken":"ds0yjOxq-Sskztv992N2heUe7rxFJfOP0IPQ","isNewUser":false},
+  env: "production",
+  stripe: {"publicKey":"pk_live_Cuj1yd7sOVUZQVaYUKEKvhp1"},
+  wafflebot: {"updatedDate":"2017-09-28","installUrl":"https://github.com/apps/wafflebot"},
+  hasApplicationAccessToken: true
+});
+</script>
+<title>matallen/search-widget | Waffle.io</title>
+<base>
+<meta name="google-site-verification"
+	content="DslCyt12H4Lwkc6L3W_fGRUCQXVDUv35aq45FvR4YQ8">
+<meta name="description"
+	content="Report issues, contribute ideas, and track progress on matallen's public Waffle.io board for search-widget.">
+<meta name="keywords"
+	content="Waffle, GitHub, Workflow, Waffle.io, Waffleio, Project Management, Kanban, Open Source, README, Repository, Startup, IOWaffle, GitHub Issues">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="http://waffle.io/resources/images/apple-touch-icon.png"
+	rel="apple-touch-icon">
+<link
+	href="http://waffle.io/resources/images/apple-touch-icon-76x76.png"
+	rel="apple-touch-icon" sizes="76x76">
+<link
+	href="http://waffle.io/resources/images/apple-touch-icon-120x120@2x.png"
+	rel="apple-touch-icon" sizes="120x120">
+<link
+	href="http://waffle.io/resources/images/apple-touch-icon-152x152@2x.png"
+	rel="apple-touch-icon" sizes="152x152">
+<link
+	href="http://waffle.io/resources/images/apple-touch-icon-180x180@3x.png"
+	rel="apple-touch-icon" sizes="180x180">
+<link rel="mask-icon"
+	href="http://waffle.io/resources/images/waffle-no-drip.svg"
+	color="#8b8b8b">
+<link rel="fluid-icon"
+	href="http://waffle.io/resources/images/fluid-icon.png" title="Waffle">
+<link href="http://waffle.io/resources/bootstrap/css/bootstrap.min.css"
+	rel="stylesheet" type="text/css">
+<link href="http://waffle.io/resources/chartist.min.css"
+	rel="stylesheet" type="text/css">
+<link
+	href="http://waffle.io/resources/font-awesome/css/font-awesome.min.css"
+	rel="stylesheet" type="text/css">
+<link
+	href="http://waffle.io/resources/app.vendor.b98d265557dbc1f5e0ab7a0f4294e42d.css"
+	rel="stylesheet" type="text/css">
+<link
+	href="http://waffle.io/resources/app.672d9c5f0d70b845f5b8ca35be9b8a8d.css"
+	rel="stylesheet" type="text/css">
+<script src="http://waffle.io/resources/es6-promise.auto.min.js"></script>
+<script src="http://waffle.io/resources/jquery-2.1.0.min.js"></script>
+<script src="http://waffle.io/resources/lodash.min.js"></script>
+<script src="http://waffle.io/resources/moment.min.js"></script>
+<script src="http://waffle.io/resources/moment-range.min.js"></script>
+<script src="http://waffle.io/resources/pusher.min.js"></script>
+<script src="http://waffle.io/resources/string.min.js"></script>
+<script
+	src="http://waffle.io/resources/runtime.6b63fb23fae23da0f831.bundle.js"></script>
+<meta property="og:site_name" content="waffle.io">
+<meta property="og:title" content="matallen/search-widget | Waffle.io">
+<meta property="og:description"
+	content="Waffle.io is automated project management powered by your GitHub issues &amp; pull requests. We track your work so you don't have to!">
+<meta property="og:image"
+	content="https://www.waffle.io/resources/images/waffle-yellow-on-blue.png">
+<meta property="og:url" content="https://waffle.io">
+<meta name="twitter:site" content="@waffleio">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image"
+	content="https://www.waffle.io/resources/images/waffle-yellow-on-blue.png">
+<meta name="twitter:title" content="matallen/search-widget | Waffle.io">
+<meta name="twitter:description"
+	content="Waffle.io is automated project management powered by your GitHub issues &amp; pull requests. We track your work so you don't have to!">
+<!-- ngRepeat: field in meta.fields -->
+<!-- ngRepeat: field in meta.fields -->
+<script type="text/javascript">window.NREUM||(NREUM={});NREUM.info = {"agent":"","beacon":"bam.nr-data.net","errorBeacon":"bam.nr-data.net","licenseKey":"afca5a5cff","applicationID":"50356610","applicationTime":11.38945,"transactionName":"bl0DbUJXDUoHVRAMCVcXJEFARAZKFVwXSiF8bE4WCkMQXBRYBQgDFgITXEBZLVgLUw==","queueTime":0,"ttGuid":"13f81796c68dde0","agentToken":null}; window.NREUM||(NREUM={}),__nr_require=function(e,n,t){function r(t){if(!n[t]){var o=n[t]={exports:{}};e[t][0].call(o.exports,function(n){var o=e[t][1][n];return r(o||n)},o,o.exports)}return n[t].exports}if("function"==typeof __nr_require)return __nr_require;for(var o=0;o<t.length;o++)r(t[o]);return r}({1:[function(e,n,t){function r(){}function o(e,n,t){return function(){return i(e,[c.now()].concat(u(arguments)),n?null:this,t),n?void 0:this}}var i=e("handle"),a=e(3),u=e(4),f=e("ee").get("tracer"),c=e("loader"),s=NREUM;"undefined"==typeof window.newrelic&&(newrelic=s);var p=["setPageViewName","setCustomAttribute","setErrorHandler","finished","addToTrace","inlineHit","addRelease"],d="api-",l=d+"ixn-";a(p,function(e,n){s[n]=o(d+n,!0,"api")}),s.addPageAction=o(d+"addPageAction",!0),s.setCurrentRouteName=o(d+"routeName",!0),n.exports=newrelic,s.interaction=function(){return(new r).get()};var m=r.prototype={createTracer:function(e,n){var t={},r=this,o="function"==typeof n;return i(l+"tracer",[c.now(),e,t],r),function(){if(f.emit((o?"":"no-")+"fn-start",[c.now(),r,o],t),o)try{return n.apply(this,arguments)}catch(e){throw f.emit("fn-err",[arguments,this,e],t),e}finally{f.emit("fn-end",[c.now()],t)}}}};a("actionText,setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","),function(e,n){m[n]=o(l+n)}),newrelic.noticeError=function(e,n){"string"==typeof e&&(e=new Error(e)),i("err",[e,c.now(),!1,n])}},{}],2:[function(e,n,t){function r(e,n){if(!o)return!1;if(e!==o)return!1;if(!n)return!0;if(!i)return!1;for(var t=i.split("."),r=n.split("."),a=0;a<r.length;a++)if(r[a]!==t[a])return!1;return!0}var o=null,i=null,a=/Version\/(\S+)\s+Safari/;if(navigator.userAgent){var u=navigator.userAgent,f=u.match(a);f&&u.indexOf("Chrome")===-1&&u.indexOf("Chromium")===-1&&(o="Safari",i=f[1])}n.exports={agent:o,version:i,match:r}},{}],3:[function(e,n,t){function r(e,n){var t=[],r="",i=0;for(r in e)o.call(e,r)&&(t[i]=n(r,e[r]),i+=1);return t}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],4:[function(e,n,t){function r(e,n,t){n||(n=0),"undefined"==typeof t&&(t=e?e.length:0);for(var r=-1,o=t-n||0,i=Array(o<0?0:o);++r<o;)i[r]=e[n+r];return i}n.exports=r},{}],5:[function(e,n,t){n.exports={exists:"undefined"!=typeof window.performance&&window.performance.timing&&"undefined"!=typeof window.performance.timing.navigationStart}},{}],ee:[function(e,n,t){function r(){}function o(e){function n(e){return e&&e instanceof r?e:e?f(e,u,i):i()}function t(t,r,o,i){if(!d.aborted||i){e&&e(t,r,o);for(var a=n(o),u=v(t),f=u.length,c=0;c<f;c++)u[c].apply(a,r);var p=s[y[t]];return p&&p.push([b,t,r,a]),a}}function l(e,n){h[e]=v(e).concat(n)}function m(e,n){var t=h[e];if(t)for(var r=0;r<t.length;r++)t[r]===n&&t.splice(r,1)}function v(e){return h[e]||[]}function g(e){return p[e]=p[e]||o(t)}function w(e,n){c(e,function(e,t){n=n||"feature",y[t]=n,n in s||(s[n]=[])})}var h={},y={},b={on:l,addEventListener:l,removeEventListener:m,emit:t,get:g,listeners:v,context:n,buffer:w,abort:a,aborted:!1};return b}function i(){return new r}function a(){(s.api||s.feature)&&(d.aborted=!0,s=d.backlog={})}var u="nr@context",f=e("gos"),c=e(3),s={},p={},d=n.exports=o();d.backlog=s},{}],gos:[function(e,n,t){function r(e,n,t){if(o.call(e,n))return e[n];var r=t();if(Object.defineProperty&&Object.keys)try{return Object.defineProperty(e,n,{value:r,writable:!0,enumerable:!1}),r}catch(i){}return e[n]=r,r}var o=Object.prototype.hasOwnProperty;n.exports=r},{}],handle:[function(e,n,t){function r(e,n,t,r){o.buffer([e],r),o.emit(e,n,t)}var o=e("ee").get("handle");n.exports=r,r.ee=o},{}],id:[function(e,n,t){function r(e){var n=typeof e;return!e||"object"!==n&&"function"!==n?-1:e===window?0:a(e,i,function(){return o++})}var o=1,i="nr@id",a=e("gos");n.exports=r},{}],loader:[function(e,n,t){function r(){if(!E++){var e=x.info=NREUM.info,n=l.getElementsByTagName("script")[0];if(setTimeout(s.abort,3e4),!(e&&e.licenseKey&&e.applicationID&&n))return s.abort();c(y,function(n,t){e[n]||(e[n]=t)}),f("mark",["onload",a()+x.offset],null,"api");var t=l.createElement("script");t.src="https://"+e.agent,n.parentNode.insertBefore(t,n)}}function o(){"complete"===l.readyState&&i()}function i(){f("mark",["domContent",a()+x.offset],null,"api")}function a(){return O.exists&&performance.now?Math.round(performance.now()):(u=Math.max((new Date).getTime(),u))-x.offset}var u=(new Date).getTime(),f=e("handle"),c=e(3),s=e("ee"),p=e(2),d=window,l=d.document,m="addEventListener",v="attachEvent",g=d.XMLHttpRequest,w=g&&g.prototype;NREUM.o={ST:setTimeout,SI:d.setImmediate,CT:clearTimeout,XHR:g,REQ:d.Request,EV:d.Event,PR:d.Promise,MO:d.MutationObserver};var h=""+location,y={beacon:"bam.nr-data.net",errorBeacon:"bam.nr-data.net",agent:"js-agent.newrelic.com/nr-1118.min.js"},b=g&&w&&w[m]&&!/CriOS/.test(navigator.userAgent),x=n.exports={offset:u,now:a,origin:h,features:{},xhrWrappable:b,userAgent:p};e(1),l[m]?(l[m]("DOMContentLoaded",i,!1),d[m]("load",r,!1)):(l[v]("onreadystatechange",o),d[v]("onload",r)),f("mark",["firstbyte",u],null,"api");var E=0,O=e(5)},{}]},{},["loader"]);</script>
+<script src="http://waffle.io/resources/angular.min.js"></script>
+<script src="http://waffle.io/resources/angular-ui-router.min.js"></script>
+<script src="http://waffle.io/resources/chartist.min.js"></script>
+<script src="http://waffle.io/resources/angular-chartist.min.js"></script>
+<script
+	src="http://waffle.io/resources/app.polyfills.5e9c0762d4142bac6785.bundle.js"></script>
+<script
+	src="http://waffle.io/resources/angular.vendor.197c3b1d111dacf9e3f0.bundle.js"></script>
+<script
+	src="http://waffle.io/resources/app.vendor.ff1c64f60a103dc0cee0.bundle.js"></script>
+<script src="http://waffle.io/resources/bootstrap/js/bootstrap.min.js"></script>
+<script
+	src="http://waffle.io/resources/app.09dec93ba8cae8dfa21f.bundle.js"></script>
+<script src="https://checkout.stripe.com/checkout.js" async=""></script>
+<style>
+.eol-banner {
+	background-color: #222;
+	border-bottom: 2px solid #000;
+	color: #fefefe;
+	font-size: 20px;
+	height: 45px;
+	line-height: 45px;
+	margin-bottom: -45px;
+	position: fixed;
+	text-align: center;
+	top: 0;
+	width: 100%;
+	z-index: 999999999
+}
+
+.eol-banner.month-warning {
+	background-color: #e77211;
+	border-bottom: 2px solid #cf660f
+}
+
+.eol-banner.day-warning {
+	background-color: #d1507f;
+	border-bottom: 2px solid #cc3c70
+}
+
+.eol-banner.hour-warning {
+	background: #f02f38;
+	border-bottom: 2px solid #ee1721
+}
+
+.eol-banner .link {
+	color: #fefefe;
+	font-weight: 700;
+	text-decoration: underline
+}
+
+.eol-banner .btn {
+	color: #222;
+	margin: 6px 15px 0;
+	text-transform: uppercase;
+	vertical-align: top
+}
+
+.eol-banner .btn:focus, .eol-banner .btn:hover {
+	background: #fefefe;
+	box-shadow: inset 0 0 4px #ee1721
+}
+</style>
+<style>
+.spinner {
+	background-color: #fefefe;
+	height: 100%;
+	left: 0;
+	margin: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+	z-index: 99
+}
+
+.spinner .mini-text {
+	color: #b1b1b1;
+	font-size: 13px;
+	margin-bottom: 25px
+}
+
+.spinner .loading-text {
+	color: #222;
+	font-size: 26px;
+	left: 50%;
+	margin: 200px 0;
+	position: absolute;
+	text-align: center;
+	transform: translateX(-50%)
+}
+
+.spinner .loading-tip {
+	margin: 0 auto;
+	max-width: 550px
+}
+
+.spinner .tip-label {
+	font-weight: 700
+}
+
+.spinner .loading-signature {
+	color: #979797;
+	display: block;
+	font-size: 15px;
+	padding: 10px
+}
+
+.spinner .loading-signature i {
+	color: #f02f38
+}
+
+.spinner-waffle {
+	height: 54px;
+	margin: 15px auto;
+	position: relative;
+	width: 54px
+}
+
+.spinner-waffle:after {
+	animation: spinner-shadow .9s linear infinite;
+	background: rgba(0, 0, 0, .2);
+	border: 1px solid transparent;
+	border-radius: 46%;
+	bottom: 0;
+	content: "";
+	height: 5px;
+	left: 50%;
+	position: absolute;
+	transform: translateX(-50%);
+	width: 100%
+}
+
+.icon-waffle {
+	animation: waffle-spin .9s linear infinite;
+	background-color: #fefefe;
+	background-image: linear-gradient(90deg, #ffd150 50%, transparent 0),
+		linear-gradient(#ffd150 50%, transparent 0);
+	background-position-x: left;
+	background-position-y: top;
+	background-size: 15px 15px;
+	border: 1px solid #ffd150;
+	border-radius: 5px;
+	bottom: 24px;
+	height: 100%;
+	left: 0;
+	position: absolute;
+	width: 100%;
+	z-index: 1
+}
+
+@
+keyframes waffle-spin { 14%{
+	border-bottom-right-radius: 5px
+}
+
+25%{
+transform
+:translateY
+(25%)
+ 
+rotate
+(22
+.5deg
+)
+}
+50%{
+border-bottom-right-radius
+:
+58%;transform
+:translateY
+(50%)
+ 
+scaleY
+(
+.9
+)
+ 
+rotate
+(45deg)
+}
+75%{
+transform
+:translateY
+(25%)
+ 
+rotate
+(67
+.5deg
+)
+}
+to {
+	transform: translateY(0) rotate(90deg)
+}
+
+}
+@
+keyframes spinner-shadow { 50%{
+	width: 80%
+}
+}
+</style>
+</head>
+<body>
+	<app-root ng-version="6.1.2">
+	<app-login>
+	<form action="#" id="app-login-form" method="POST"
+		style="display: none;" class="ng-pristine ng-valid"></form>
+	</app-login>
+	<router-outlet></router-outlet>
+	<ng-component></ng-component>
+	<div id="project-ct">
+		<!-- uiView:  -->
+		<div id="page" ui-view="" class="ng-scope">
+			<div class="ng-scope">
+				<!-- uiView:  -->
+				<div ui-view="" class="ng-scope">
+					<div class="ng-scope">
+						<nav
+							ng-class="{'maximized': !isCollapsed, 'minimized': isCollapsed}"
+							class="sidebar navbar navbar-inverse dark-theme-enabled minimized"
+							role="navigation" bindonce="">
+							<div waffle-sidebar-toggle="" class="sidebar-toggle"
+								tooltip="expand sidebar" tooltip-popup-delay="1000"
+								tooltip-enable="isCollapsed" tooltip-append-to-body="true"
+								tooltip-placement="right">
+								<span ng-click="toggleMaximized()" class="sidebar-toggle-icon"
+									tooltip="minimize sidebar" tooltip-popup-delay="1000"
+									tooltip-enable="!isCollapsed" tooltip-append-to-body="true"
+									tooltip-placement="right"> <i class="fa fa-angle-right"
+									aria-hidden="true"></i>
+								</span>
+							</div>
+							<div class="nav-list-item brand-list-item">
+								<a class="navbar-brand nav-link" ui-sref="app.home.dashboard"
+									href="http://waffle.io/"> <i class="ico-logo nav-list-icon"
+									aria-hidden="true"></i> <span class="sidebar-action-text">waffle<span
+										class="nav-logo-text-io">.io</span></span> <span class="sr-only">go
+										to home page</span>
+								</a>
+								<button class="navbar-toggle collapsed mobile-sidebar-toggle"
+									type="button" data-toggle="collapse"
+									data-target=".navbar-collapse">
+									<i class="fa fa-bars" aria-hidden="true"></i> <i
+										class="fa fa-times" aria-hidden="true"></i>
+								</button>
+							</div>
+							<div class="navbar-header collapse navbar-collapse">
+								<ul class="nav navbar-nav">
+									<li class="nav-list-item js-share share-item"
+										ng-class="{'open': share}" ng-show="isRealProject"><a
+										class="nav-link share-btn" href="#"> <i
+											class="fa fa-users nav-list-icon"
+											tooltip="Invite/Share Board" tooltip-popup-delay="1200"
+											tooltip-enable="isCollapsed" tooltip-append-to-body="true"
+											tooltip-placement="right" aria-hidden="true"></i> <span
+											class="sidebar-action-text">Invite/Share</span> <span
+											class="sr-only">Open popup with shareable link to this
+												Waffle Project</span>
+									</a> <!-- ngIf: share --></li>
+									<li class="nav-list-item js-wafflebot wafflebot-item ng-hide"
+										ng-class="{'open': wafflebot}"
+										ng-show="showWaffleBot &amp;&amp; (!hasWafflebot || oldWafflebot)">
+										<a class="nav-link wafflebot-btn" href="#"> <i
+											class="fa fa-bolt nav-list-icon" tooltip="Enable WaffleBot"
+											tooltip-popup-delay="1200" tooltip-enable="isCollapsed"
+											tooltip-append-to-body="true" tooltip-placement="right"
+											aria-hidden="true"></i> <!-- ngIf: oldWafflebot && showWaffleBot -->
+											<span class="sidebar-action-text">WaffleBot</span> <span
+											class="sr-only">Open popup with instructions to
+												install or upgrade WaffleBot</span>
+									</a> <!-- ngIf: wafflebot -->
+									</li>
+									<!-- ngIf: project -->
+									<li class="nav-list-item ng-scope" ng-if="project"><a
+										class="nav-link active" data-ng-click="closeMobileMenu()"
+										ui-sref="app.board.home({username: username, repo: repo})"
+										ui-sref-active="active" href="search-widget.html"> <i
+											class="fa fa-table nav-list-icon" tooltip="Board View"
+											tooltip-popup-delay="1200" tooltip-enable="isCollapsed"
+											tooltip-append-to-body="true" tooltip-placement="right"
+											aria-hidden="true"></i> <span class="sidebar-action-text">Board
+												View</span>
+									</a></li>
+									<!-- end ngIf: project -->
+									<!-- ngIf: project && !project.isPhantom -->
+									<li class="metrics nav-list-item ng-scope"
+										ng-if="project &amp;&amp; !project.isPhantom"><a
+										class="nav-link" data-ng-click="closeMobileMenu()"
+										ui-sref="app.board.metrics" ui-sref-active="active"
+										href="search-widget/metrics.html"> <i
+											class="fa fa-bar-chart-o nav-list-icon" tooltip="Metrics"
+											tooltip-popup-delay="1200" tooltip-enable="isCollapsed"
+											tooltip-append-to-body="true" tooltip-placement="right"
+											aria-hidden="true"></i> <span class="sidebar-action-text">Metrics</span>
+									</a></li>
+									<!-- end ngIf: project && !project.isPhantom -->
+									<!-- boIf: isTeamMember -->
+									<li class="nav-list-item"><a ng-show="project"
+										data-ng-click="closeMobileMenu()"
+										class="nav-link js-github-url"
+										href="https://github.com/matallen/search-widget"
+										target="_blank"> <i class="fa fa-github nav-list-icon"
+											tooltip="View on GitHub" tooltip-popup-delay="1200"
+											tooltip-enable="isCollapsed" tooltip-append-to-body="true"
+											tooltip-placement="right" aria-hidden="true"></i> <span
+											class="sidebar-action-text">View on GitHub</span>
+									</a> <!-- ngIf: showAccountNav --></li>
+									<!-- boIf: loggedIn -->
+									<span class="sidebar-bottom-nav">
+										<li class="nav-list-item js-help" ng-class="{'open': help}">
+											<a class="nav-link help-btn" href="#"> <i
+												class="fa fa-question-circle nav-list-icon" tooltip="Help"
+												tooltip-popup-delay="1200" tooltip-enable="isCollapsed"
+												tooltip-append-to-body="true" tooltip-placement="right"
+												aria-hidden="true"></i> <span class="sidebar-action-text">Help</span>
+												<span class="sr-only">Open popup for Help Options</span>
+										</a> <!-- ngIf: help -->
+									</li> <!-- boIf: loggedIn --> <!-- boIf: !loggedIn -->
+										<li class="login-action nav-list-item ng-scope"
+										bo-if="!loggedIn"><a class="nav-link" ng-click="login()">
+												<i class="fa fa-user nav-list-icon" tooltip="Login"
+												tooltip-popup-delay="1200" tooltip-enable="isCollapsed"
+												tooltip-append-to-body="true" tooltip-placement="right"
+												aria-hidden="true"> </i> <span class="sidebar-action-text">Login</span>
+										</a></li>
+									</span>
+								</ul>
+							</div>
+							<!-- ngIf: project -->
+							<div class="header-nav ng-scope" ng-if="project">
+								<div class="header-nav-actions">
+									<div class="navbar-actions-ct nav-list-item">
+										<!-- ngIf: isRealProject -->
+										<a ng-if="isRealProject" class="project-account-link ng-scope"
+											ui-sref="app.account.home({owner: username})"
+											href="http://waffle.io/matallen"> <i
+											class="fa account-type-icon fa-user-circle-o"
+											ng-class="isOrgAccount ? 'fa-building-o' : 'fa-user-circle-o'"
+											tooltip="matallen's Account Page" tooltip-popup-delay="600"
+											tooltip-append-to-body="true" tooltip-placement="right"
+											aria-hidden="true"></i> <span class="sr-only ng-binding">Go
+												to matallen's account page</span>
+										</a>
+										<!-- end ngIf: isRealProject -->
+										<ul class="dropdown-ct ng-scope">
+											<li class="dropdown project-dropdown"><a
+												class="dropdown-menu-toggle" data-toggle="dropdown" href="#">
+													<div class="dropdown-title ng-binding">
+														matallen/search-widget <span class="sr-only">current
+															project</span>
+													</div> <span class="sr-only">open project dropdown</span> <i
+													class="fa fa-angle-down toggle-caret" aria-hidden="true"></i>
+											</a> <!-- ngIf: expanded --></li>
+										</ul>
+									</div>
+									<!-- ngIf: showBoardActions -->
+									<div class="board-actions ng-scope" ng-if="showBoardActions">
+										<div class="add-issue nav-list-item">
+											<div id="js-add-new-hint" class="add-new ng-isolate-scope">
+												<div class="add-new-issue" ng-class="{'open': expanded}">
+													<span class="header-action-toggle"> <!-- ngIf: loggedIn -->
+													</span>
+													<!-- ngIf: !loggedIn -->
+													<span ng-if="!loggedIn" class="logged-out-buttons ng-scope">
+														<a class="button primary login" ng-click="login()"> <i
+															class="fa fa-github responsive-text"></i> Login <span
+															class="responsive-text">to add/edit issues</span>
+													</a> <span class="separator responsive-text">or</span> <a
+														class="board-signup responsive-text" ng-click="signup()">Sign
+															up - It's Free</a>
+													</span>
+													<!-- end ngIf: !loggedIn -->
+													<form ng-show="expanded"
+														class="popover input-group-sm ng-pristine ng-valid ng-hide">
+														<h3 class="mobile-popover-heading">Add New Issue</h3>
+														<label class="sr-only" id="title-label" for="title">Card
+															Title</label> <input
+															class="form-control text-input ng-pristine ng-valid"
+															type="text" placeholder="Title" name="title"
+															ng-model="title" tabindex="1" aria-required="true"
+															aria-labelledby="title-label">
+														<!-- ngIf: title -->
+														<span ng-show="project.sources.length &gt; 1"
+															class="js-source-select ng-hide"> <i
+															class="github-icon github-icon-repo select-icon"></i>
+															<div
+																class="dropdown select select-with-icon ng-isolate-scope"
+																tabindex="2">
+																<a class="dropdown-menu-toggle" data-toggle="dropdown">
+																	<div class="dropdown-title ng-binding">matallen/search-widget</div>
+																	<i class="fa fa-angle-down toggle-caret"></i>
+																</a>
+																<div class="dropdown-menu">
+																	<div class="dropdown-input-ct">
+																		<input type="text" ng-model="sourceSearch"
+																			placeholder="Find repository"
+																			class="form-control dropdown-input ng-pristine ng-valid">
+																	</div>
+																	<ul class="dropdown-menu-item-list">
+																		<!-- ngRepeat: source in sortedSources | filter:sourceSearch -->
+																		<li class="dropdown-menu-item ng-scope"
+																			ng-repeat="source in sortedSources | filter:sourceSearch"
+																			ng-class="{highlight: ($index === 0 &amp;&amp; sourceSearch)}"
+																			ng-click="selectSource(source)"><span
+																			class="source-title ng-binding">matallen/search-widget</span>
+																			<!-- ngIf: !source.private -->
+																			<span ng-if="!source.private"
+																			class="small pull-right ng-scope"><em>public</em></span>
+																		<!-- end ngIf: !source.private --> <!-- ngIf: source.private -->
+																		</li>
+																		<!-- end ngRepeat: source in sortedSources | filter:sourceSearch -->
+																	</ul>
+																</div>
+															</div>
+														</span>
+														<div id="collapse-details" class="panel-collapse collapse"
+															ng-class="{'in': detailsOpen}">
+															<div class="card-description">
+																<textarea class="form-control ng-pristine ng-valid"
+																	rows="5" placeholder="Enter card description"
+																	name="description" ng-model="description" tabindex="3">          </textarea>
+															</div>
+															<!-- ngIf: isTeamMember -->
+															<!-- ngIf: isTeamMember -->
+															<!-- ngIf: isTeamMember -->
+															<!-- ngIf: isTeamMember -->
+														</div>
+														<div class="form-footer">
+															<a class="close-btn">Close</a> <a
+																class="expand-form-toggle" data-toggle="collapse"
+																data-target="#collapse-details"> <span
+																ng-hide="formExpanded" class="">more details<i
+																	class="fa fa-angle-down toggle-caret"></i></span> <span
+																ng-show="formExpanded" class="ng-hide"><i
+																	class="fa fa-angle-up"></i>fewer details</span>
+															</a>
+															<button class="primary go-button js-add-new-button"
+																data-loading-text="Creating..." ng-click="createCard()"
+																ng-disabled="!title" type="submit" tabindex="8"
+																disabled="disabled">Add</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+										<!-- ngIf: milestones.length -->
+										<div class="filter nav-list-item">
+											<div id="js-filter-hint" class="filter-board ng-scope">
+												<div class="search">
+													<span class="desktop-input"> <input type="text"
+														class="form-control search-query ng-pristine ng-valid"
+														placeholder="Filter Board" ng-model="search"> <!-- ngIf: search -->
+													</span> <a class="header-action-toggle"
+														ng-class="{'open': expanded, 'filtered': isFiltered}"
+														href="#"> <span class="sr-only">open board
+															filter options</span> <i class="fa fa-filter filter-icon"
+														aria-hidden="true"></i> <i
+														class="fa fa-caret-down filter-more" aria-hidden="true"></i>
+													</a>
+													<!-- ngIf: expanded -->
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- end ngIf: showBoardActions -->
+								</div>
+							</div>
+							<!-- end ngIf: project -->
+						</nav>
+						<!-- uiView: undefined -->
+						<ui-view class="ng-scope">
+						<div class="page-sizer dark-theme-enabled ng-scope minimized"
+							ng-class="{'maximized': !isCollapsed, 'minimized': isCollapsed}">
+							<div class="board js-board">
+								<!-- ngIf: project.migratedState -->
+								<!-- ngIf: !board -->
+								<app-spinner ng-if="!board" class="ng-scope" ng-version="6.1.2">
+								<div class="spinner">
+									<div class="loading-text">
+										<div class="spinner-waffle">
+											<div class="icon-waffle"></div>
+										</div>
+										<p class="mini-text">loading your waffle iron ...</p>
+										<p class="loading-tip">
+											<span class="tip-label">Pro Tip: </span> Add multiple repos
+											to your board for greater visibility across your team. <span
+												class="loading-signature">- <i class="fa fa-heart"></i>
+												Waffle
+											</span>
+										</p>
+									</div>
+								</div>
+								</app-spinner>
+								<!-- end ngIf: !board -->
+								<!-- ngIf: project -->
+								<span ng-if="project" class="ng-scope">
+									<div class="waffle-oauth-banner banner bg-warning ng-hide"
+										ng-show="needsAuthentication"
+										waffle-oauth-banner-severity="'warning'">
+
+										<i class="fa fa-exclamation-triangle text-warning banner-icon"></i>
+										<span class="message text-warning" ng-transclude=""><span
+											class="ng-scope"> You need further authentication to
+												see all the content on this page. </span></span>
+
+										<button class="btn btn-default" ng-click="authenticate()">Authenticate</button>
+										<button class="btn btn-link banner-dismiss"
+											ng-click="hideBannerForever()">
+											<i class="fa fa-times"></i>Don't ask again
+										</button>
+									</div>
+									<div class="waffle-webhook-banner banner bg-danger ng-hide"
+										ng-show="unhookedSources">
+
+										<i class="fa fa-exclamation-triangle text-danger banner-icon"></i>
+										<span class="message text-danger ng-binding">Uh oh!
+											Waffle needs an admin of to configure webhooks, to enable
+											real time updates from GitHub.</span>
+
+										<div class="webhook-banner-tooltip-wrapper"
+											tooltip="Only an admin can create the webhook, sorry!"
+											tooltip-placement="top" tooltip-enable="!canCreateHook"
+											tooltip-append-to-body="true">
+											<button class="btn btn-default" ng-click="createHooks()"
+												ng-disabled="!canCreateHook" disabled="disabled">Create
+												Hooks</button>
+										</div>
+										<div class="webhook-banner-tooltip-wrapper hide-link"
+											ng-hide="settingsView"
+											tooltip="Banner will only show on Repositories page in Settings"
+											tooltip-placement="top" tooltip-append-to-body="true">
+											<button class="btn btn-link banner-dismiss"
+												ng-click="hideBannerOnBoard()">
+												<i class="fa fa-times"></i>Don't show again
+											</button>
+										</div>
+									</div> <!-- ngIf: project -->
+									<div class="create-project-banner banner top ng-scope ng-hide"
+										ng-show="project.createable" ng-if="project">
+
+										<span class="message">Like what you see? Create this
+											repo as a project in Waffle to get started.</span>
+
+										<button class="btn btn-default" ng-click="createProject()">Let's
+											go!</button>
+										<a class="btn btn-link"
+											href="https://help.waffle.io/faq/creating-project-boards-in-waffle/what-happens-when-i-create-a-project"
+											target="_blank">What happens when I click this button?</a>
+									</div>
+									<!-- end ngIf: project --> <!-- ngIf: !project.account.isGrandfathered -->
+									<div ng-show="showBanner"
+										class="cta-banner banner top js-trialing ng-scope ng-isolate-scope ng-hide"
+										ng-if="!project.account.isGrandfathered"
+										account="project.account">
+										<span class="message"> Your trial ends in <span
+											class="trial-end ng-binding"></span>. <!-- ngIf: validExtensions -->
+											<!-- ngIf: !validExtensions -->
+											<span ng-if="!validExtensions" class="ng-scope"> All 5
+												extensions are redeemed. Purchase before it's over! </span>
+										<!-- end ngIf: !validExtensions --> <!-- ngIf: !isAdmin -->
+											<span ng-if="!isAdmin" class="message-small ng-scope">(talk
+												to <a href="http://waffle.io/matallen" target="_blank"><span
+													class="account-owner ng-binding">matallen</span></a> to
+												upgrade!)
+										</span>
+										<!-- end ngIf: !isAdmin -->
+										</span>
+										<!-- ngIf: isAdmin -->
+									</div>
+									<!-- end ngIf: !project.account.isGrandfathered -->
+									<div ng-show="showBanner"
+										class="cta-banner banner top ng-isolate-scope ng-hide"
+										account="project.account">
+										<span class="message"> Upgrade to see your private
+											issues <span class="message-small ng-binding">(not
+												seeing issues from 0 repo)</span>
+										</span>
+										<!-- ngIf: isAdmin && hasTrialed -->
+										<!-- ngIf: isAdmin && !hasTrialed -->
+										<!-- ngIf: !isAdmin -->
+										<span ng-if="!isAdmin" class="message ng-scope">Talk to
+											<a href="https://github.com/matallen" target="_blank"><span
+												class="account-owner ng-binding">matallen</span></a> to upgrade!
+										</span>
+										<!-- end ngIf: !isAdmin -->
+									</div>
+									<div ng-show="showBanner"
+										class="cta-banner banner top ng-isolate-scope ng-hide"
+										account="project.account">
+										<span class="message"> You've purchased the <strong
+											class="ng-binding"></strong> plan in GitHub marketplace, but
+											it should be <strong class="ng-binding"></strong>.
+										</span> <a class="btn btn-default" target="_blank"
+											ng-href="/marketplace/waffle"
+											href="http://waffle.io/marketplace/waffle">Update your
+											plan</a>
+									</div>
+
+									<div class="board-body">
+										<div class="columns-ct">
+											<!-- ngRepeat: column in board.columns | orderBy:'rank' -->
+										</div>
+										<!-- ngIf: showWalkThrough -->
+									</div>
+								</span>
+								<!-- end ngIf: project -->
+							</div>
+
+							<div ng-controller="KeyboardShortcutDocsController"
+								class="ng-scope"></div>
+							<!-- uiView: undefined -->
+							<ui-view class="ng-scope"> </ui-view>
+						</div>
+						</ui-view>
+					</div>
+				</div>
+				<div class="alert-drawer " ng-class="{slide: message}">
+					<div class="message">
+						<i class="fa fa-spinner waffle-spin ng-hide"
+							ng-show="type == 'processing'"></i> <i
+							class="fa fa-check ng-hide" ng-show="type == 'success'"></i> <i
+							class="fa fa-bolt ng-hide" ng-show="type == 'info'"></i> <i
+							class="fa fa-exclamation-triangle js-danger ng-hide"
+							ng-show="type == 'danger'"></i> <i
+							class="fa fa-exclamation-triangle js-warning ng-hide"
+							ng-show="type == 'warning'"></i> <span ng-bind-html="message"
+							class="ng-binding"></span>
+					</div>
+					<a class="dismiss" href="#" ng-click="dismissAlert()"></a>
+				</div>
+				<!-- ngIf: adminMessage -->
+				<app-eol-banner project="project" ng-version="6.1.2">
+				<div class="eol-banner month-warning">
+					<span class="message"> Waffle is <a class="link"
+						href="https://waffle.io/closing-its-doors" target="_blank">closing
+							its doors</a><span apptooltip="May 16th 2019"
+						apptooltipposition="bottom"> in a month</span>.
+					</span>
+					<!---->
+				</div>
+				</app-eol-banner>
+			</div>
+		</div>
+	</div>
+	<div id="js-login-form-container"></div>
+	</app-root>
+</body>
+<!-- Mirrored from waffle.io/matallen/search-widget by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 10 Apr 2019 14:51:41 GMT -->
+</html>

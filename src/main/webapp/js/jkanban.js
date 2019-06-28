@@ -15,6 +15,7 @@ var dragula = require('dragula');
     this.jKanban = function () {
         var self = this;
         this._disallowedItemProperties = ['id', 'title', 'click', 'drag', 'dragend', 'drop', 'order'];
+        //this._disallowedItemProperties = ['id', 'click', 'drag', 'dragend', 'drop', 'order'];
         this.element = '';
         this.container = '';
         this.boardContainer = [];
@@ -23,6 +24,9 @@ var dragula = require('dragula');
         this.drakeBoard = '';
         this.addItemButton = false;
         this.buttonContent = '+';
+        this.users = [];
+        this.userToAvatarId = {};
+        this.userIdToUser = {};
         defaults = {
             element: '',
             gutter: '15px',
@@ -54,8 +58,17 @@ var dragula = require('dragula');
         if (arguments[0] && typeof arguments[0] === "object") {
             this.options = __extendDefaults(defaults, arguments[0]);
         }
-
+        
         this.init = function () {
+        	//get user (if assignment enabled)
+        	if (self.options.userAssignment){
+        	  self.users=self.options.loadUsers();
+        	  for(i=0;i<self.users.length;i++){
+        		  self.userToAvatarId[self.users[i].username]=self.users[i].avatar;
+        		  self.userIdToUser[self.users[i].username]=self.users[i];
+        	  }
+        	}
+        	
             //set initial boards
             __setBoard();
             //set drag with dragula
@@ -288,14 +301,36 @@ var dragula = require('dragula');
                     // Display card text
                     nodeItemTitle.innerHTML=cardDisplay(board.id, nodeItem, itemKanban);
                     
+                    var cardHtml=nodeItemTitle;
+                    var card=nodeItem.dataset;
+                    card["title"]=itemKanban.title;
+                    var cardId=nodeItem.dataset.eid;
+                    // action handlers
+                    
+                    // open handler
+                    __clickHandler(nodeItemTitle.querySelectorAll(".btnOpen")[0], card, function(card){
+                    	console.log('card.onOpen():: card='+JSON.stringify(card));
+                    	
+                    	// any field thats been updated on the board will be incorrect. the data needs to be kept in a js array somewhere, or with a binding library
+                    	
+                    	$("#details-container").html(details(card));
+                    	//$(".issue-title").text(card.title);
+                    	
+                    	//$(".modal-title").text("#"+card.eid);
+                    	//$(".issue-title").text(card.title);
+                    	$("#details").modal()
+                    });
+                    
                     if (self.options.labels){
                       
+                      // label delete handler
                       var labels=nodeItemTitle.querySelectorAll(".btnLabelDelete");
                       for (i=0; i<labels.length; i++)
                         __onClickHandler2(labels[i], nodeItem, self.options.onLabelDelete, function(caller){
                         	caller.parentElement.remove();
                         });
                       
+                      // label new handler
                       var labels=nodeItemTitle.querySelectorAll(".btnLabelNew");
                       for (i=0; i<labels.length; i++){
                         __onBlurHandler2(labels[i], nodeItem, self.options.onLabelNew, function (newLabelTextBox, taskId, label){
@@ -312,9 +347,38 @@ var dragula = require('dragula');
                       __attachOnLabelDeleteHandlers(nodeItemTitle.querySelector(".labelswrapper"), nodeItem);
                     }
                     
-                    
                     if (self.options.deleteCards)
-                      __ondeleteHandler(nodeItemTitle.querySelector(".btnDeleteCard"), nodeItem, self.options.onDelete);
+                      __ondeleteHandler(nodeItemTitle.querySelector(".btnDeleteCard"), nodeItem, self.options.onCardDelete);
+                    
+                    if (self.options.userAssignment){
+                      
+                      // user assignment avatar onClick
+                      var userButtons=nodeItemTitle.querySelectorAll(".btnAssignUser");
+                      for (i=0; i<userButtons.length; i++){
+                    	  __onAssignUserClickHandler(userButtons[i], nodeItem, self.options.onAssignUser, self.options.onUnassignUser);
+                      }
+                      
+                      
+                      // user assignment name filter box
+                      var filterBoxes=nodeItemTitle.querySelectorAll(".user-filter");
+                      for (i=0; i<filterBoxes.length; i++){
+                    	  __keyUpHandler(filterBoxes[i], card, cardHtml, function(card, html){
+                    		  var value=html.querySelector(".user-filter").value.toLowerCase();
+                    		  console.log("user-filter("+card.eid+").click()->"+value);
+                    		  html.querySelectorAll(".row").forEach(function(row){
+                    			  text = row.innerText.trim().toLowerCase();
+                    			  console.log("row = "+text);
+                    			  if(text.indexOf(value)>=0){
+                    				  row.style.display="block";
+                    			  }else{
+                    				  row.style.display="none";
+                    			  }
+                    			  
+                    		  });
+                    	  });
+                      }
+                      
+                    }
                     
                     __onBlurHandler2(nodeItemTitle.querySelector(".title"), nodeItem, self.options.onUpdate, function (newLabelTextBox, taskId, label){
                     	// this is only called on successful update of title, so update the title to the new value?
@@ -402,6 +466,72 @@ var dragula = require('dragula');
             self.element.appendChild(self.container);
         };
         
+        //function __clickHander(target, nodeItem, fn){
+        //	target.addEventListener('click', function (e) {
+        //        e.preventDefault();
+        //        fn(nodeItem.dataset.eid); // pass the card Id
+        //	});
+        //}
+        
+        function __openHandler(target, nodeItem, fn){
+        	target.addEventListener('click', function (e) {
+                e.preventDefault();
+                fn(nodeItem);
+        	});
+        }
+        
+        function __clickHandler(target, card, fn){
+        	target.addEventListener('click', function (e) {
+                e.preventDefault();
+                fn(card);
+        	});
+        }
+        
+        function __keyUpHandler(target, card, html, fn){
+        	target.addEventListener('keyup', function (e) {
+                e.preventDefault();
+                fn(card, html);
+        	});
+        }
+        
+        function __onShowUsersClickHandler(target, nodeItem, clickfn){
+        	target.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (typeof(this.clickfn) === 'function')
+                    this.clickfn(nodeItem);
+                //console.log('loading Users dialog for cardId='+nodeItem.dataset.eid);
+                //var jsonUsers=self.options.loadUsers(nodeItem.dataset.eid);
+            });
+        }
+        
+        function __onAssignUserClickHandler(target, nodeItem, assignfn, unassignfn){
+        	target.addEventListener('click', function (e) {
+                e.preventDefault();
+                //console.log('onAssign/UnassignUser():: card '+e.currentTarget.dataset.cardid+', toggled user '+e.currentTarget.dataset.userid);
+                
+                var checkmarkId=e.currentTarget.dataset.checkmark;
+                
+                //change the UI
+                var cm=$("#"+checkmarkId);
+                
+                //callback to the framework actions
+                if (cm.hasClass("is-picked")){
+                	unassignfn(e.currentTarget.dataset.cardid, e.currentTarget.dataset.userid, function(cardId, userId){
+                		cm.removeClass("is-picked");
+                		// remove avatar from card
+                		$("button#assign-c"+cardId+"-u"+userId).remove();
+                	});
+                }else{
+                	assignfn(e.currentTarget.dataset.cardid, e.currentTarget.dataset.userid, function(cardId, userId){
+                		cm.addClass("is-picked");
+                		// add avatar to card
+                		$("div#assign-"+cardId).append(__showAssignedUsersAvatar(cardId, userId));
+                	});
+                }
+                
+            });
+        }
+        
         function __attachOnLabelDeleteHandlers(labelsWrapper, nodeItem){
           var deleteButtons=labelsWrapper.querySelectorAll(".btnLabelDelete");
           for (i=0; i<deleteButtons.length; i++)
@@ -485,6 +615,7 @@ var dragula = require('dragula');
                     continue;
                 }
 
+                //console.log("__appendCustomProperties:: "+propertyName+"="+parentObject[propertyName]);
                 element.setAttribute('data-' + propertyName, parentObject[propertyName]);
             }
         }
@@ -495,66 +626,336 @@ var dragula = require('dragula');
                 self.container.childNodes[i].dataset.order = index++;
             }
         }
-
-        function cardDisplay(boardId, el, data){
-          var result="<div class='card'>";
-          result+="<div class='header'><a class='id' href='#'>"+data.id+"</a><span class='right'>";
-          
-          if (self.options.userAssignment)
-            result+="<button class='action-btn'><i class='unassigned fa fa-user'></i></button>";
-          
-          result+="</span></div>";
-          result+="<div class='body'>";
-          
-          if (undefined!=self.options.customDisplay){
-            result+=self.options.customDisplay(boardId, el, data);
+        
+        function __showAssignedUsersAvatar(cardId, userId){
+        	if (userId=="") return;
+			var result='';
+			result+='      <button data-toggle="dropdown" id="assign-c'+cardId+'-u'+userId+'" class="dropdown-toggle action-btn btnUsers">';
+			result+='        <img class="avatar-rounded" title="'+self.userIdToUser[userId].name+' ('+self.userIdToUser[userId].username+')" style="position:relative; top:-4px;" width="21" height="21" src="'+self.userIdToUser[userId].avatar+'">';
+			result+='      </button>';
+			return result;
+        }
+        
+        function details(card){
+          console.log("details():: card="+JSON.stringify(card));
+          let result=`
+          <div class="modal fade" id="details" role="dialog">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4>
+                    <span class="modal-title">${card.eid}</span>
+                  </h4>
+                </div>
+                <div class="modal-body container-fluid">
+                  <div class="row">
+                    <div class="card-main col-md-10">
+                      <div class="top">
+                        <h5 class="issue-title">${card.title}</h5>
+                        
+                        <div class="card-comment">
+                          <a href="https://github.com/matallen">
+                            <img class="card-comment-avatar img-rounded" height="40" width="40" src="https://avatars3.githubusercontent.com/u/3470466?v=4">
+                          </a>
+                          <div class="card-comment-item">
+                            <div class="card-comment-header">
+                              <span class="">Description</span>
+                              <button class="btn-icon pull-right btnCommentDelete"><i class="fa fa-times action-menu-icon" title="Delete this comment"></i></button>
+                              <button class="btn-icon pull-right btnCommentEit"><i class="fa fa-pencil-alt action-menu-icon" title="Edit this comment"></i></button>
+                            </div>
+                            <div class="card-comment-body">
+                              <p>some description</p>
+                            </div>
+                            <div class="card-comment-body card-comment-body-edit hidden">
+                              <textarea>some description</textarea>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="card-comment">
+                          <a href="https://github.com/matallen">
+                            <img class="card-comment-avatar img-rounded" height="40" width="40" src="https://avatars3.githubusercontent.com/u/3470466?v=4">
+                          </a>
+                          <div class="card-comment-item">
+                            <div class="card-comment-header">
+                              <a href="https://github.com/matallen"><span class="">matallen</span></a> commented 21 days ago
+                              <button class="btn-icon pull-right btnCommentDelete"><i class="fa fa-times action-menu-icon" title="Delete this comment"></i></button>
+                              <button class="btn-icon pull-right btnCommentEit"><i class="fa fa-pencil-alt action-menu-icon" title="Edit this comment"></i></button>
+                            </div>
+                            <div class="card-comment-body">
+                              <p>some comment</p>
+                            </div>
+                            <div class="card-comment-body card-comment-body-edit hidden">
+                              <textarea>some comment</textarea>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div class="divider"></div>
+                        
+                        <!-- add comment box -->
+                        <div class="comment-form">
+                          <div class="tabset ng-isolate-scope">
+                            <ul class="nav nav-tabs">
+                              <li class="active"><a href="">Write</a></li>
+                              <li disabled="disabled" class="disabled"><a href="#" disabled>Preview</a></li>
+                            </ul>
+                            <div class="tab-content">
+                              <div>
+                                <textarea class="form-control" tabindex="4" autocomplete="off" style="overflow: hidden; overflow-wrap: break-word; resize: none; height: 54px;"></textarea>
+                              </div>
+                            </div>
+                            <div class="footer">
+                              <button class="animate btn btn-primary pull-right comment-btn" tabindex="7" data-loading-text="Commenting..." disabled="disabled">Comment</button>
+                              <!-- if state != CLOSED -->
+                              <button class="animate btn btn-default pull-right comment-close-btn" tabindex="8" data-loading-text="Closing...">Close issue</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <style>
+                    
+                    </style>
+                    
+                    
+                    <div class="card-sidebar col-md-3">
+                      <div class="status">
+                        <span class="closed">CLOSED</span>
+                      </div>
+                      <div class="horizontal-divider"></div>
+                      <div class="assignee-container sidebar-options">
+                        <button data-toggle="dropdown" class="option-button">
+                          <span>Assignees</span>
+                          <i class="fa fa-cog menu-toggle-icon"></i>
+                        </button>`;
+          var assignedSplit=card.assigned.split(",");
+          if (assignedSplit.length>0){
+        	  result+=`<ul class="assignee-img-list ng-scope">`;
+        	  for(var i=0;i<assignedSplit.length;i++){
+        		  var usr=self.userIdToUser[assignedSplit[i]];
+        		  result+=`
+        			  <li class="assignee-img-list-item ng-scope">
+        			  <img class="assignee-img" bo-src="assignee.avatar_url" src="${usr.avatar}">
+        			  <p class="assignee-login" bo-text="assignee.login">${usr.username}</p>
+        			  </li>`;
+        	  }
+        	  result+=`</ul>`;
           }else{
-            result+="<textarea class='title'>"+data.title+"</textarea>";
+        	  result+=`     <p class="option-placeholder ng-scope" ng-if="!card.githubMetadata.assignees.length">Unassigned</p>`;
           }
+          result+=`<!-- mat: real dropdown users menu goes here -->`;
+          result+=__assignUserDialog(card, true);
+          result+=`   </div>
+                      <div class="sizing-container sidebar-options">
+                        <button class="option-button" data-toggle="dropdown">
+                          <span>Size/Estimate</span>
+                          <i class="fa fa-cog menu-toggle-icon"></i>
+                        </button>
+                      </div>
+                      <div class="labels-container sidebar-options">
+                        <button class="option-button" data-toggle="dropdown">
+                          <span>Labels</span>
+                          <i class="fa fa-cog menu-toggle-icon"></i>
+                        </button>
+                        <div class="labels">`;
+          result+=``;
+          var labelsSplit=card.labels.split(",");
+          if (labelsSplit.length>0){
+        	  for(var i=0;i<labelsSplit.length;i++){
+        		  var labelSplit=labelsSplit[i].split("|"); //format: <name>|<color>
+        		  var label=labelSplit[0].replace(/\ /g, "&nbsp;");
+        		  var color=labelSplit[1];
+        		  if (""!=label)
+        		    result+=`       <span class="label-pill card-details-label-pill light" style="background-color: ${color}">${label}</span>`;
+        	  }
+          }else{
+        	  result+=`       <div class="option-placeholder">No Labels</div>`;
+          }
+                          
+          result+=`     </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          `;
+          return result;
+        }
+        
+        function __assignUserDialog(data, isDetailsPane){
+          var result='';
+          result+='      <div class="dropdown-menu'+(isDetailsPane?" details-dropdown-menu":"")+'" aria-labelledby="assignmentMenuBtn">';
+          result+='       <div class="up-arrow"></div>';
+          result+='       <div class="up-arrow-inner"></div>';
           
-          result+="</div><div class='footer clearfix'>";
-          result+="<div class='labels'>";
-          result+="<span class='labelswrapper'>";
+          result+='       <div class="text-center waffle-dropdown-menu-header">';
+          result+='        <div style="margin:8"><p style="">Assign people to this card</p>';
+          result+='        <input style="height:25px" type="text" placeholder="Filter people" class="user-filter form-control js-assignee-search ng-pristine ng-valid"></div>';
+          result+='        <ul id="user-table" style="padding:0px; margin:0px" onclick="event.stopPropagation();">';
+          for (i=0;i<self.users.length;i++){
+            result+='     <li class="dropdown-menu-item row" style="margin:0px 0px 0px 0px;">';
+            var checkmarkId=data.id+''+self.users[i].username+'checkmark';
+            result+='      <i id="'+checkmarkId+'" class="fa fa-check checkmark '+(data.assigned!=undefined && data.assigned.includes(self.users[i].username)?'is-picked':'')+'"></i>';
+            result+='      <button data-cardId="'+data.id+'" data-userId="'+self.users[i].username+'" data-checkmark="'+checkmarkId+'" style="width:100%; text-align:left;" class="btnAssignUser action-btn">';
+            //result+='        <img style="position:relative; top:-4px;" width="30" height="30" src="https://avatars1.githubusercontent.com/u/'+self.users[i].id+'?v=4">&nbsp;'+self.users[i].name+'';
+            result+='        <img class="img-circle" style="position:relative; top:-4px;" width="30" height="30" src="'+self.users[i].avatar+'">&nbsp;'+self.users[i].name+'';
+            result+='      </button>';
+            result+='     </li>';
+          }
+          result+='        </ul>';
+          result+='       </div>';
+          result+='      </div>';
+          return result;
+        }
+        
+        function cardDisplay(boardId, el, data){
+        	//console.log("cardDisplay:: el="+JSON.stringify(el));
+        	console.log("cardDisplay:: data="+JSON.stringify(data));
+        	
+          // known action buttons: btnLabelDelete, btnLabelNew, btnDeleteCard
+          
+          var result="";
+          
+          result+="  <div class='card'>";
+          result+="   <table style='width:100%;'>";
+          
+          // header
+          result+="    <tr>";
+          
+          // header.id
+          result+="     <td class='field w-10'><a class='id btnOpen' href='#'>"+data.id+"</a></td>";
+          
+          // header.title
+          result+="     <td class='field'>";
+            if (undefined!=self.options.customDisplay){
+              result+=self.options.customDisplay(boardId, el, data);
+          }else{
+            //result+="<textarea class='title'>"+data.title+"</textarea>";
+            result+="<textarea id='title_"+data.id+"' style='height:10px' class='title'>"+data.title+"</textarea>";
+//            // add date
+//            result+="<br/><span style='border: 3px solid transparent'>"+data.timestamp.substring(0,10)+"</span>";
+          }
+          result+="     </td>";
+          
+          // header.assignment
+          result+="     <td class='field w-5'>";
+          //<button data-toggle='dropdown' class='dropdown-toggle action-btn btnAssignUser'><i class='fa fa-user action-menu-icon'></i></button></td>";
+          
+	          result+='     <div class="dropdown" id="assign-'+data.id+'" style="white-space: nowrap;">';
+//	          result+='      <button data-toggle="assignment-dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle action-btn" >';
+	          
+	        
+	          if (data.assigned!=undefined && data.assigned.length>0){
+	            
+	            // display the list of avatars for the assigned users
+	            var assigned=data.assigned.split(",");
+	            for (i=0;i<assigned.length;i++)
+	              result+=__showAssignedUsersAvatar(data.id, assigned[i])
+	          }else{
+	            // display the grey head & shoulders if no users are assigned
+	            result+='      <button data-toggle="dropdown" id="assign-c'+data.id+'-u0" class="dropdown-toggle action-btn btnUsers"><i class="fa fa-user action-menu-icon"></i></button>';
+	          }
+	          result+=__assignUserDialog(data);
+	          //result+='      <div style="width: 230px; left:-196px; top: 35px; padding:0px" class="dropdown-menu" aria-labelledby="assignmentMenuBtn">';
+	          //result+='       <div class="up-arrow"></div>';
+	          //result+='       <div class="up-arrow-inner"></div>';
+	          //
+	          //result+='       <div class="text-center waffle-dropdown-menu-header">';
+	          //result+='        <div style="margin:8"><p style="">Assign people to this card</p>';
+	          //result+='        <input style="height:25px" type="text" placeholder="Filter people" class="user-filter form-control js-assignee-search ng-pristine ng-valid"></div>';
+	          //result+='        <ul id="user-table" style="padding:0px; margin:0px" onclick="event.stopPropagation();">';
+	          //for (i=0;i<self.users.length;i++){
+	          //  result+='     <li class="dropdown-menu-item row" style="margin:0px 0px 0px 0px;">';
+	          //  var checkmarkId=data.id+''+self.users[i].username+'checkmark';
+	          //  result+='      <i id="'+checkmarkId+'" class="fa fa-check checkmark '+(data.assigned!=undefined && data.assigned.includes(self.users[i].username)?'is-picked':'')+'"></i>';
+	          //    result+='      <button data-cardId="'+data.id+'" data-userId="'+self.users[i].username+'" data-checkmark="'+checkmarkId+'" style="width:100%; text-align:left;" class="btnAssignUser action-btn">';
+	          //    //result+='        <img style="position:relative; top:-4px;" width="30" height="30" src="https://avatars1.githubusercontent.com/u/'+self.users[i].id+'?v=4">&nbsp;'+self.users[i].name+'';
+	          //    result+='        <img class="img-circle" style="position:relative; top:-4px;" width="30" height="30" src="'+self.users[i].avatar+'">&nbsp;'+self.users[i].name+'';
+	          //    result+='      </button>';
+	          //    result+='     </li>';
+	          //}
+	          //result+='        </ul>';
+	          //result+='       </div>';
+	          //result+='      </div>';
+	          result+='     </div>';
+	          
+          result+="    </td></tr>";
+          
+          // main
+          // (empty)
+          
+          // footer
+          result+="    <tr>";
+          result+="     <td colspan='3'><table style='width:100%'><tr><td style='width:100%;'>";
+          
+          // footer.labels
+          result+="      <div class='labels'>";
+          result+="       <span class='labelswrapper'>";
           if (self.options.labels){
             if (undefined!=data.labels){
               var labelsArray=data.labels.split(",");
               for (i=0;i<labelsArray.length;i++){
-                if (labelsArray[i]!="")
-                  result+="<span class='label-pill ng-scope label-pill-green'>"+labelsArray[i]+" <button class='btnLabelDelete' data-id='"+data.id+"' data-label='"+labelsArray[i]+"'>x</button></span>";
+                if (labelsArray[i]!=""){
+                  var labelArray=labelsArray[i].split("|");
+                  result+="<span class='label-pill ng-scope label-pill-green' style='background-color:"+labelArray[1]+";'>"+labelArray[0]+" <button class='btnLabelDelete' data-id='"+data.id+"' data-label='"+labelArray[0]+"'>x</button></span>";
+                }
               }
             }
           }
+          result+="       </span>";
+          result+="      <span class='label-pill ng-scope label-pill-new'><input class='btnLabelNew' onBlur='this.parentNode.classList.remove(\"open\")' onFocus='this.parentNode.classList.add(\"open\")' data-id='"+data.id+"' type='text'/></span>";
+          result+="      </div></td>";
           
-          result+="</span>";
-          result+="<span class='label-pill ng-scope label-pill-new'><input class='btnLabelNew' onBlur='this.parentNode.classList.remove(\"open\")' onFocus='this.parentNode.classList.add(\"open\")' data-id='"+data.id+"' type='text'/></span>";
-          result+="</div>";
+          // footer.checklist
+          if (self.options.checklists)
+            result+="       <td class='w-5'><button class='action-btn'><i class='fas fa-tasks'></i></button></td>";
           
-          result+="<div class='actions right'>";
-          
+          // footer.comments
           if (self.options.comments)
-            result+="<button class='action-btn'><i class='fas fas-comment-alt'></i></button>";
-            
+            result+="       <td class='w-5'><button class='action-btn'><i class='fas fas-comment-alt'></i></button></td>";
+          
+          // footer.action menu
           if (self.options.contextMenu){
-            result+='<div class="action-menu">';
-            result+='  <button data-toggle="dropdown" class="dropdown-toggle action-btn" >';
+            result+='<td class="w-5">';
+            
+            result+='<div class="dropdown">';
+            result+='  <button data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle action-btn" >';
             result+='    <i class="fa fa-ellipsis-v action-menu-icon"></i>';
             result+='  </button>';
-            result+='  <ul class="dropdown-menu card-dropdown-menu">';
-            
+            result+='  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+            result+='  <ul class="">'; // had classes: dropdown-menu card-dropdown-menu
             if (self.options.deleteCards){
-              result+='    <li class="dropdown-menu-item">';
-              result+='      <button class="btnDeleteCard action-btn">Delete Card</button>';
-              result+='    </li>';
+              result+='    <li class="dropdown-menu-item"><button class="btnDeleteCard action-btn">Delete Card</button></li>';
             }
             result+='  </ul>';
+            result+='  </div>';
             result+='</div>';
-            
           }
           
-          result+="</div></div>";
-          result+="</div>";
-        
+          // close out the structure
+          result+="       ";
+          result+="      </tr></table>";
+          result+="     </td>";
+          result+="    </tr>";
+          
+          result+="   <table>";
+          
+          result+=' </div>';
+          result+='</div>';
+          
           return result;
+          
+          
+          
         }
         
         //init plugin

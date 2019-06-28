@@ -53,6 +53,9 @@ public class ManagementController {
     System.out.println((1000 * 60 * 60 * 24));
     System.out.println(TimeUnit.DAYS.toMillis(1));
 //    System.out.println(new ManagementController().toNextLevel("BLUE", 7).toString());
+    
+    
+    new ManagementController().getScorecardSummary("mallen");
   }
   
   public static boolean isLoginEnabled(){

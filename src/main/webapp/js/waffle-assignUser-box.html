@@ -1,0 +1,255 @@
+<div class="dropdown-menu waffle-dropdown-menu assignees-dropdown-menu ng-scope ng-isolate-scope" card="card" ng-if="assigneesExpanded">
+  <div class="up-arrow"></div>
+  <div class="up-arrow-inner"></div>
+
+  <div class="text-center waffle-dropdown-menu-header">
+    <p>Assign up to 10 people to this card</p>
+    <input type="text" ng-model="assigneeSearch.login" placeholder="Filter people" class="form-control js-assignee-search ng-pristine ng-valid">
+  </div>
+
+  <ul class="text-left waffle-dropdown-menu-list" ng-click="$event.stopPropagation()">
+    <li class="waffle-dropdown-menu-list-item" ng-click="setAssignees()">
+      <i class="fa fa-times-circle-o clear-selection-icon" aria-hidden="true"></i>
+      <span class="clear-selection-text">Clear assignees</span>
+    </li>
+    <li ng-hide="possibleAssignees" class="text-center ng-hide"><i class="fa fa-spinner fa-spin"></i></li>
+    <!-- ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/3470466?v=4">
+      <span class="user-login" bo-text="assignee.login">matallen</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/16197393?v=4">
+      <span class="user-login" bo-text="assignee.login">ahardin-rh</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/2881993?v=4">
+      <span class="user-login" bo-text="assignee.login">bbeaudoin</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars0.githubusercontent.com/u/3968991?v=4">
+      <span class="user-login" bo-text="assignee.login">beelandc</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/3624001?v=4">
+      <span class="user-login" bo-text="assignee.login">boogiespook</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/25939696?v=4">
+      <span class="user-login" bo-text="assignee.login">bvkin</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/8948630?v=4">
+      <span class="user-login" bo-text="assignee.login">CaseyOC</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars2.githubusercontent.com/u/14282991?v=4">
+      <span class="user-login" bo-text="assignee.login">davgordo</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/22479160?v=4">
+      <span class="user-login" bo-text="assignee.login">dfwnetman</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars2.githubusercontent.com/u/8711217?v=4">
+      <span class="user-login" bo-text="assignee.login">dstockdreher</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/3105685?v=4">
+      <span class="user-login" bo-text="assignee.login">ericzolf</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/4500758?v=4">
+      <span class="user-login" bo-text="assignee.login">etsauer</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/44725?v=4">
+      <span class="user-login" bo-text="assignee.login">fridim</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars2.githubusercontent.com/u/218146?v=4">
+      <span class="user-login" bo-text="assignee.login">ghyde</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars0.githubusercontent.com/u/327874?v=4">
+      <span class="user-login" bo-text="assignee.login">gjbianco</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/11966535?v=4">
+      <span class="user-login" bo-text="assignee.login">huddlesj</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/632932?v=4">
+      <span class="user-login" bo-text="assignee.login">JaredBurck</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/4761608?v=4">
+      <span class="user-login" bo-text="assignee.login">JayKayy</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/801689?v=4">
+      <span class="user-login" bo-text="assignee.login">jbride</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars2.githubusercontent.com/u/13226422?v=4">
+      <span class="user-login" bo-text="assignee.login">jimdillon</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/20134928?v=4">
+      <span class="user-login" bo-text="assignee.login">jlozadad</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/2375181?v=4">
+      <span class="user-login" bo-text="assignee.login">Jooho</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/1110178?v=4">
+      <span class="user-login" bo-text="assignee.login">juliaaano</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars0.githubusercontent.com/u/40833944?v=4">
+      <span class="user-login" bo-text="assignee.login">kelaird</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/1485670?v=4">
+      <span class="user-login" bo-text="assignee.login">ldomb</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/1235238?v=4">
+      <span class="user-login" bo-text="assignee.login">levysantanna</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars0.githubusercontent.com/u/8032159?v=4">
+      <span class="user-login" bo-text="assignee.login">luckylittle</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/10531016?v=4">
+      <span class="user-login" bo-text="assignee.login">makentenza</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/26797509?v=4">
+      <span class="user-login" bo-text="assignee.login">malacourse</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars0.githubusercontent.com/u/965154?v=4">
+      <span class="user-login" bo-text="assignee.login">mike4263</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/3041902?v=4">
+      <span class="user-login" bo-text="assignee.login">mophahr</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/643097?v=4">
+      <span class="user-login" bo-text="assignee.login">murphye</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars2.githubusercontent.com/u/20846131?v=4">
+      <span class="user-login" bo-text="assignee.login">mwitzenm</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/4221612?v=4">
+      <span class="user-login" bo-text="assignee.login">newgoliath</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/458707?v=4">
+      <span class="user-login" bo-text="assignee.login">noelo</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars0.githubusercontent.com/u/19938077?v=4">
+      <span class="user-login" bo-text="assignee.login">NonyNo3lle</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars0.githubusercontent.com/u/10761042?v=4">
+      <span class="user-login" bo-text="assignee.login">nunnchops</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars0.githubusercontent.com/u/7549785?v=4">
+      <span class="user-login" bo-text="assignee.login">oybed</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/5749047?v=4">
+      <span class="user-login" bo-text="assignee.login">pabrahamsson</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars2.githubusercontent.com/u/39594693?v=4">
+      <span class="user-login" bo-text="assignee.login">pathfinder-waffle</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/4354948?v=4">
+      <span class="user-login" bo-text="assignee.login">pcarney8</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars2.githubusercontent.com/u/6179036?v=4">
+      <span class="user-login" bo-text="assignee.login">raffaelespazzoli</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/1299370?v=4">
+      <span class="user-login" bo-text="assignee.login">rdebeasi</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/2971730?v=4">
+      <span class="user-login" bo-text="assignee.login">rut31337</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars0.githubusercontent.com/u/1191285?v=4">
+      <span class="user-login" bo-text="assignee.login">sabre1041</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/279246?v=4">
+      <span class="user-login" bo-text="assignee.login">samueltauil</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/9275608?v=4">
+      <span class="user-login" bo-text="assignee.login">sborenst</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/1335137?v=4">
+      <span class="user-login" bo-text="assignee.login">sherl0cks</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/6122439?v=4">
+      <span class="user-login" bo-text="assignee.login">springdo</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/8162705?v=4">
+      <span class="user-login" bo-text="assignee.login">stratus-ss</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/3935979?v=4">
+      <span class="user-login" bo-text="assignee.login">syvanen</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/38983294?v=4">
+      <span class="user-login" bo-text="assignee.login">texasbrok</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/532487?v=4">
+      <span class="user-login" bo-text="assignee.login">themoosman</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars2.githubusercontent.com/u/4438167?v=4">
+      <span class="user-login" bo-text="assignee.login">thomas-crowe</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars1.githubusercontent.com/u/104339?v=4">
+      <span class="user-login" bo-text="assignee.login">tomassedovic</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars0.githubusercontent.com/u/29497147?v=4">
+      <span class="user-login" bo-text="assignee.login">tylerauerbeck</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars3.githubusercontent.com/u/10787731?v=4">
+      <span class="user-login" bo-text="assignee.login">victorock</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars2.githubusercontent.com/u/1020491?v=4">
+      <span class="user-login" bo-text="assignee.login">vvaldez</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login --><li class="waffle-dropdown-menu-list-item ng-scope" bindonce="" ng-repeat="assignee in possibleAssignees | filter:assigneeSearch track by assignee.login" ng-class="{highlight: ($index === 0 &amp;&amp; assigneeSearch)}" ng-click="setAssignees(assignee)">
+      <i ng-class="{'is-picked': isActiveAssignee(assignee)}" class="fa fa-check checkmark"></i>
+      <img bo-src="assignee.avatarUrl" class="img-circle" src="https://avatars2.githubusercontent.com/u/8929233?v=4">
+      <span class="user-login" bo-text="assignee.login">wkulhanek</span>
+    </li><!-- end ngRepeat: assignee in possibleAssignees | filter:assigneeSearch track by assignee.login -->
+  </ul>
+  <button class="close-btn btn" ng-click="close()">Close</button>
+</div>

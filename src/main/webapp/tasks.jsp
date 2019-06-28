@@ -18,6 +18,7 @@ java.util.Calendar
     
     <link rel="stylesheet" href="https://raw.githack.com/riktar/jkanban/master/dist/jkanban.min.css">
     <link rel="stylesheet" href="css/tasks.css">
+    <link rel="stylesheet" href="css/tasks-details.css">
     
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/solid.css" integrity="sha384-+0VIRx+yz1WBcCTXBkVQYIBVNEFH1eP6Zknm16roZCyeNg2maWEpk/l/KsyFKs7G" crossorigin="anonymous">
 		<!--link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/regular.css" integrity="sha384-aubIA90W7NxJ+Ly4QHAqo1JBSwQ0jejV75iHhj59KRwVjLVHjuhS3LkDAoa/ltO4" crossorigin="anonymous"-->
@@ -54,6 +55,8 @@ java.util.Calendar
 <body>
 <div id="myKanban"></div>
 
+<div id="details-container"></div>
+
 
 <!--
 <input type="text" id="newItem" /><button disabled id="addToDo">Add</button>
@@ -61,17 +64,81 @@ java.util.Calendar
 -->
 <script src="js/jkanban.js"></script>
 
+<style>
+.w-5{width:5%;}
+.w-10{width:10%;}
+.w-20{width:20%;}
+.w-30{width:30%;}
+.w-40{width:40%;}
+.w-50{width:50%;}
+.card .title{
+	font-size: 14px;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  box-sizing: border-box;
+  color: #525252;
+  line-height: 18px;
+  margin: 0;
+  min-height: 22px;
+  overflow: hidden;
+  padding: 2px 2px 0;
+  resize: none;
+  white-space: normal;
+	width:92%;
+/*
+*/
+}
+.field{
+  vertical-align: top;
+}
+.action-btn{
+	height: 20px;
+	width: 20px;
+	padding: 0px 20px 0px 0px;
+	margin: 0px;
+	/* remove button borders*/
+  border-color: transparent;
+	background-color: transparent;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+button:focus{outline:0;}
+.hidden{
+  display: none;
+}
+
+.dropdown-menu{
+    padding: 0px;
+    text-align: right;
+    float: right;
+    border: 1px solid rgba(0,0,0,.15);
+    border-radius: 4px;
+    -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    -moz-box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    box-shadow: 0 6px 12px rgba(0,0,0,.175);
+    height: inherit;
+    position: absolute;
+    width: 220px;
+    
+    top: 35px;
+    left: -158px;
+}
+.details-dropdown-menu{
+    top: 77px;
+    left: -13px;
+}
+</style>
 
 <script>
 
 $(document).ready(function() {
-	Http.httpGet("${pageContext.request.contextPath}/api/tasks", function(response){
+	Http.httpGet("${pageContext.request.contextPath}/api/tasks?including=users", function(response){
 		
 		var j=JSON.parse(response);
-		var todo=j.todo;
-		var working=j.working;
-		var done=j.done;
-		
+		var todo=j.boards.todo;
+		var working=j.boards.working;
+		var done=j.boards.done;
+		var users=j.users;
 		
 		//console.log("response="+j);
 		//console.log("response.todo="+j.todo);
@@ -86,8 +153,9 @@ $(document).ready(function() {
         dragBoards: false,
         contextMenu: true,
         deleteCards: true,
+        checklists: false,
         comments: false,
-        userAssignment: false,
+        userAssignment: true,
         labels: true,
         onLabelNew: function(el, nodeItem, addLabel){
           console.log("onLabelNew():: el.value="+el.value+", el.dataset="+JSON.stringify(el.dataset) +", nodeItem="+JSON.stringify(nodeItem.dataset));
@@ -97,13 +165,39 @@ $(document).ready(function() {
             	addLabel(el, el.dataset.id, el.value);
           });
         },
-        
         onLabelDelete: function(el, nodeItem, removeLabel){
           console.log("onLabelDelete():: el="+JSON.stringify(el.dataset) +", nodeItem="+JSON.stringify(nodeItem.dataset));
           Http.httpDelete("${pageContext.request.contextPath}/api/tasks/"+el.dataset.id+"/labels/"+el.dataset.label, null, function(response, status){
             if (status==200)
             	removeLabel(el, el.dataset.id, el.value);
           });
+        },
+        loadUsers: function(){
+        	console.log("loadUsers():: users="+users);
+        	return users;
+        },
+        getAssigned: function(cardId){
+        	
+        },
+        //loadAssigned: function (cardId){
+        //  console.log("loadAssigned():: for cardId="+cardId);
+        //},
+        onAssignUser: function(cardId, userId, addUser){
+        	console.log('onAssignUser():: card '+cardId+', toggled user '+userId);
+        	// add user to card
+        	Http.httpPost("${pageContext.request.contextPath}/api/tasks/"+cardId+"/assigned/"+userId, null, function(response, status){
+            if (status==200)
+            	addUser(cardId, userId);
+          });
+        },
+        onUnassignUser: function(cardId, userId, removeUser){
+        	console.log('onUnassignUser():: card '+cardId+', toggled user '+userId);
+        	// remove user from card
+        	Http.httpDelete("${pageContext.request.contextPath}/api/tasks/"+cardId+"/assigned/"+userId, null, function(response, status){
+            if (status==200)
+        	    removeUser(cardId, userId);
+          });
+        	
         },
         onUpdate: function(el, nodeItem, updateTitle){
         	console.log("onUpdate():: el="+el.value +", nodeItem="+JSON.stringify(nodeItem.dataset));
@@ -117,32 +211,32 @@ $(document).ready(function() {
 		    	});
         	
         },
-        onDelete: function(el){
+        onCardDelete: function(el){
         	console.log("onDelete():: el="+JSON.stringify(el.dataset));
         	Http.httpPost("${pageContext.request.contextPath}/api/tasks/"+el.dataset.eid+"/delete", null, function(response){
        				KanbanTest.removeElement(el.dataset.eid);
         	});
         },
-        customDisplay: function(boardId, el, data){
-        	console.log("customDisplay():: el="+JSON.stringify(el.dataset));
-        	
-        	return "<textarea id='title_"+data.id+"' style='height:10px' class='title'>"+data.title+"</textarea><br/><span style='border: 3px solid transparent'>"+data.timestamp.substring(0,10)+"</span>";
-        	
-        	
-        	//return "<div class='card'>"+
-        	//			 "<div class='header'><a class='id' href=''>"+id+"</a><span class='right'><button onclick=''><i class='unassigned fa fa-user'></i></button></span></div>"+
-        	//			 "<div class='body'><textarea class='title' onblur='card_title_update(\""+data.id+"\",this);'>"+data.title+"</textarea></div>"+
-        	//			 "<div class='footer clearfix'><div class='footer-labels'></div>"+
-        	//			 "<div class='footer-actions right'>"+
-        	//			   "<button><i class='fas fas-comment-alt'></i></button>"+
-        	//			   "<button><i class='fa fa-dots'></i></button>"+
-        	//			 "</div></div>"+
-        	//			 "</card>";
-        	//
-        	//return "<table><tr><td>"+data.title+"</td></tr><tr><td>"+data.user+"</td></tr><tr><td>"+data.timestamp.substring(0,10)+"</td></tr></table>";
-        	//
-        	//return "<table><tr><td>"+data.title+"</td></tr><tr><td>"+data.timestamp.substring(0,10)+"</td></tr></table>";
-        },
+        //customDisplay: function(boardId, el, data){
+        //	console.log("customDisplay():: el="+JSON.stringify(el.dataset));
+        //	
+        //	return "<textarea id='title_"+data.id+"' style='height:10px' class='title'>"+data.title+"</textarea><br/><span style='border: 3px solid transparent'>"+data.timestamp.substring(0,10)+"</span>";
+        //	
+        //	
+        //	//return "<div class='card'>"+
+        //	//			 "<div class='header'><a class='id' href=''>"+id+"</a><span class='right'><button onclick=''><i class='unassigned fa fa-user'></i></button></span></div>"+
+        //	//			 "<div class='body'><textarea class='title' onblur='card_title_update(\""+data.id+"\",this);'>"+data.title+"</textarea></div>"+
+        //	//			 "<div class='footer clearfix'><div class='footer-labels'></div>"+
+        //	//			 "<div class='footer-actions right'>"+
+        //	//			   "<button><i class='fas fas-comment-alt'></i></button>"+
+        //	//			   "<button><i class='fa fa-dots'></i></button>"+
+        //	//			 "</div></div>"+
+        //	//			 "</card>";
+        //	//
+        //	//return "<table><tr><td>"+data.title+"</td></tr><tr><td>"+data.user+"</td></tr><tr><td>"+data.timestamp.substring(0,10)+"</td></tr></table>";
+        //	//
+        //	//return "<table><tr><td>"+data.title+"</td></tr><tr><td>"+data.timestamp.substring(0,10)+"</td></tr></table>";
+        //},
         //click: function (el) {
         //	console.log("onClick: "+el.dataset.eid);
         //	//

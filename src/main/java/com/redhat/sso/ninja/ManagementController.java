@@ -479,7 +479,10 @@ public class ManagementController {
     wrapper.put("columns", columns);
     wrapper.put("data", data);
     
-    return Response.status(200).entity(Json.newObjectMapper(true).writeValueAsString(wrapper)).build();
+    return Response.status(200)
+    		.entity(Json.newObjectMapper(true).writeValueAsString(wrapper))
+    		.header("X-Content-Type-Options", "nosniff")
+    		.build();
   }
   
   

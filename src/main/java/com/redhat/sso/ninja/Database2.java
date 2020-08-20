@@ -58,13 +58,11 @@ public class Database2{
   	if (params.get("id").startsWith("TR")){
   		return "([Trello card: "+params.get("linkId")+"|https://trello.com/c/"+params.get("linkId")+"] / "+params.get("id")+")";
   	}else if (params.get("id").startsWith("GH")){
-  		if (params.get("pool").toLowerCase().contains("pull")){
-  			return "([Github card: "+params.get("linkId")+"|https://github.com/"+params.get("org")+"/"+params.get("board")+"/pull/"+params.get("linkId")+"] / "+params.get("id")+")";
-  		}else{ // assume "issues"
-  			return "([Github card: "+params.get("linkId")+"|https://github.com/"+params.get("org")+"/"+params.get("board")+"/issues/"+params.get("linkId")+"] / "+params.get("id")+")";
-  		}
-  	//}else if (params.get("id").startsWith("GL")){
-  	//	return "([Gitlab card: "+params.get("linkId")+"|"+params.get("linkId")+"])";
+  		boolean isPullRequest=params.get("pool").toLowerCase().contains("pull");
+  		return "([Github card: "+params.get("linkId")+"|https://github.com/"+params.get("org")+"/"+params.get("board")+"/"+(isPullRequest?"pull":"issues")+"/"+params.get("linkId")+"] / "+params.get("id")+")";
+  	}else if (params.get("id").startsWith("GL")){
+  		boolean isMerge=params.get("pool").toLowerCase().contains("merge");
+  		return "([Gitlab card: "+params.get("linkId")+"|https://gitlab.consulting.redhat.com/"+params.get("org")+"/"+params.get("board")+"/-/"+(isMerge?"merge_requests":"issues")+"/"+params.get("linkId")+"] / "+params.get("id")+")";
   	}
   	return "";
   }

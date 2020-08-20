@@ -1,5 +1,7 @@
 package com.redhat.sso.ninja;
 
+
+import static com.redhat.sso.ninja.utils.ResponseUtils.newResponse;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -53,7 +55,7 @@ import com.redhat.sso.ninja.utils.MapBuilder;
 public class ManagementController {
   private static final Logger log=Logger.getLogger(ManagementController.class);
   
-//  public static void main(String[] asd) throws JsonGenerationException, JsonMappingException, IOException, URISyntaxException{
+  public static void main(String[] asd) throws JsonGenerationException, JsonMappingException, IOException, URISyntaxException{
 //    System.out.println(java.sql.Date.valueOf(LocalDate.now()));
 //    System.out.println(java.sql.Date.valueOf(LocalDate.now().minus(365, ChronoUnit.DAYS)));
 //    System.out.println((1000 * 60 * 60 * 24));
@@ -61,20 +63,12 @@ public class ManagementController {
 ////    System.out.println(new ManagementController().toNextLevel("BLUE", 7).toString());
 //    
 //    new ManagementController().yearEnd(null,  null,  "FY20");
-//  }
+  	
+  	System.out.println(new ManagementController().getScorecard("mallen").getEntity());
+  }
   
   public static boolean isLoginEnabled(){
     return "true".equalsIgnoreCase(Config.get().getOptions().get("login.enabled"));
-  }
-  
-  // common response created because post v79'ish of Chrome they introduced a SIGNED_EXCHANGE error without the following headers on every response
-  private ResponseBuilder newResponse(int status){
-    return Response.status(status)
-     .header("Access-Control-Allow-Origin",  "*")
-     .header("Content-Type","application/json")
-     .header("Cache-Control", "no-store, must-revalidate, no-cache, max-age=0")
-     .header("Pragma", "no-cache")
-     .header("X-Content-Type-Options", "nosniff");
   }
   
   @POST

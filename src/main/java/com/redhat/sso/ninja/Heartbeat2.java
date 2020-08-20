@@ -417,76 +417,7 @@ public class Heartbeat2 {
         	try{
         		scriptFailure=!new ScriptExecutor(db, scripts, poolToUserIdMapper).run(script, lastRun2);
         	}catch(Exception e){}
-//          try{
-//            
-//            String command=(String)script.get("source");
-//            String version=RegExHelper.extract(command, "/(v.+)/");
-//            // enhancement: if version is null, split by / and take the penultimate item as version - this will support "master", or non v??? versions
-//            String name=(String)script.get("name");
-//            File scriptFolder=new File(scripts, name+"/"+version);
-//            scriptFolder.mkdirs(); // ensure the parent folders exist if they dont already
-//            
-////            URL remoteLocationWithoutParams=new URL(command.contains(" ")?command.substring(0, command.indexOf(" ")):command); // strip script execution params to allow it to be downloaded
-////            File localDestination=new File(scriptFolder);//, new File(remoteLocationWithoutParams.getPath()).getName());
-//            String originalCommand=command.toString();
-//            command=new DownloadFile().get(command, scriptFolder, 
-//                PosixFilePermission.OWNER_READ, 
-//                PosixFilePermission.OWNER_WRITE, 
-//                PosixFilePermission.OWNER_EXECUTE,
-//                PosixFilePermission.GROUP_READ, 
-//                PosixFilePermission.GROUP_WRITE, 
-//                PosixFilePermission.GROUP_EXECUTE);
-//            
-//            if (command.contains("${LAST_RUN") || command.contains("${DAYS_FROM_LAST_RUN")){
-//            	Date lastRun=FluentCalendar.get(lastRun2).add(Calendar.DAY_OF_MONTH, -1).build().getTime();
-//            	command=convertLastRun(command, lastRun);
-//            }
-//            
-//            log.info("Script downloaded ("+version+"): "+originalCommand);
-//            log.info("Script executing: "+command);
-//            
-//            Process script_exec=Runtime.getRuntime().exec(command);
-//            script_exec.waitFor();
-//            if(script_exec.exitValue() != 0){
-//              
-//              BufferedReader stdInput=new BufferedReader(new InputStreamReader(script_exec.getInputStream()));
-//              StringBuffer sb=new StringBuffer();
-//              String s;
-//              while ((s=stdInput.readLine()) != null) sb.append(s).append("\n");
-//              log.error("Error while executing script (stdout): "+sb.toString());
-//              
-//              BufferedReader stdErr=new BufferedReader(new InputStreamReader(script_exec.getErrorStream()));
-//              sb.setLength(0);
-//              while ((s=stdErr.readLine()) != null) sb.append(s).append("\n");
-//              log.error("Error while executing script (stderr): "+sb.toString());
-//              
-//              db.addEvent("Script Execution FAILED", "", command+"\nERROR (stderr):\n"+sb.toString());
-//              
-//              new ChatNotification().send(ChatEvent.onScriptError, name+" script failure occurred. Please investigate");
-//              
-//              scriptFailure=true;
-//              
-//            }else{
-//            	allocatePoints(db, script_exec.getInputStream(), script, scriptFolder, poolToUserIdMapper);
-//            	db.addEvent("Script Execution Succeeded", "", command +" (took "+(System.currentTimeMillis()-start)+"ms)");
-//            	
-//            }
-//            
-//          }catch (IOException e){
-//            e.printStackTrace();
-//          }catch (InterruptedException e){
-//            e.printStackTrace();
-//          }catch (ParseException e){
-//            e.printStackTrace();
-//          }
         }
-        
-//        if (scriptFailure){
-//	        db.addEvent("Script Execution FAILED", "", command+"\nERROR (stderr):\n"+sb.toString());
-//	        new ChatNotification().send(ChatEvent.onScriptError, name+" script failure occurred. Please investigate");
-//        }else{
-//        	db.addEvent("Script Execution Succeeded", "", command +" (took "+(System.currentTimeMillis()-start)+"ms)");
-//        }
         
         log.info("Script ("+(String)script.get("name")+") execution took "+(System.currentTimeMillis()-start)+"ms");
         db.save(); //save after each script execution
